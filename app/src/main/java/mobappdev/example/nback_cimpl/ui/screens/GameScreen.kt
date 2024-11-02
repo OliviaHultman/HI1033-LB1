@@ -28,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -47,12 +48,9 @@ fun GameScreen(
 ) {
     val score by vm.score.collectAsState()
     val gameState by vm.gameState.collectAsState()
-    val snackBarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
-    var visualButtonColor = by remember { mutableStateOf() };
+    var visualButtonColor by remember { mutableStateOf(Color.Blue) }
 
     Scaffold(
-        snackbarHost = { SnackbarHost(snackBarHostState) }
     ) {
         Column(
             modifier = Modifier
@@ -74,22 +72,21 @@ fun GameScreen(
             Box(
                 modifier = Modifier
                     .height(400.dp)
-                    .background(Color.Red)
             ) {
                 Column(
                     verticalArrangement = Arrangement.SpaceEvenly,
                     modifier = Modifier
                         .fillMaxHeight()
                 ){
-                    repeat(3) {col ->
+                    repeat(3) {row ->
                         Row(
                             horizontalArrangement = Arrangement.SpaceEvenly,
                             modifier = Modifier
                                 .fillMaxWidth()
                         ) {
-                            repeat(3) { row ->
+                            repeat(3) { col ->
                                 var background = Color.LightGray
-                                if ((col + 1) + 3 * (row + 1) == gameState.eventValue) {
+                                if ((col + 1) + 3 * row == gameState.eventValue) {
                                     background = Color.DarkGray
                                 }
                                 Box(
@@ -112,11 +109,6 @@ fun GameScreen(
             ) {
                 Button(onClick = {
                     // Todo: change this button behaviour
-                    scope.launch {
-                        snackBarHostState.showSnackbar(
-                            message = "Hey! you clicked the audio button"
-                        )
-                    }
                     if (gameState.gameType == GameType.Audio) {
 
                     }
@@ -133,12 +125,6 @@ fun GameScreen(
                     colors = ButtonDefaults.buttonColors(containerColor = visualButtonColor),
                     onClick = {
                         // Todo: change this button behaviour
-                        scope.launch {
-                            snackBarHostState.showSnackbar(
-                                message = "Hey! you clicked the visual button",
-                                duration = SnackbarDuration.Short
-                            )
-                        }
                         if (gameState.gameType == GameType.Visual) {
                             vm.checkMatch();
                             if (gameState.eventValue == -1) {
