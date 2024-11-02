@@ -1,0 +1,5 @@
+# ninja log v5
+2	1478	7520764843910672	CMakeFiles/nback_cimpl.dir/nback.c.o	ac0da16ddc54c85
+12	1523	7520764843950487	CMakeFiles/JniBridge.dir/JniBridge.c.o	540c71ce305a09d2
+1483	1964	7520764848671994	C:/Users/Olivia Hultman/Documents/mobila_applikationer_och_tradlosa_nat/lb_1/HI1033-LB1/app/build/intermediates/cxx/Debug/2p6u2w5s/obj/x86_64/libnback_cimpl.so	9f91b450d064daa0
+1966	2312	7520764852356080	C:/Users/Olivia Hultman/Documents/mobila_applikationer_och_tradlosa_nat/lb_1/HI1033-LB1/app/build/intermediates/cxx/Debug/2p6u2w5s/obj/x86_64/libJniBridge.so	e00b81dff763b6a2

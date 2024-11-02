@@ -1,0 +1,12 @@
+[
+{
+  "directory": "C:/Users/Olivia Hultman/Documents/mobila_applikationer_och_tradlosa_nat/lb_1/HI1033-LB1/app/.cxx/Debug/3e01z3q1/x86_64",
+  "command": "C:\\Users\\OLIVIA~1\\AppData\\Local\\Android\\Sdk\\ndk\\251~1.893\\TOOLCH~1\\llvm\\prebuilt\\WINDOW~1\\bin\\clang.exe --target=x86_64-none-linux-android26 --sysroot=\"C:/Users/Olivia Hultman/AppData/Local/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/sysroot\" -Dnback_cimpl_EXPORTS -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -fno-limit-debug-info  -fPIC -o CMakeFiles\\nback_cimpl.dir\\nback.c.o -c \"C:\\Users\\Olivia Hultman\\Documents\\mobila_applikationer_och_tradlosa_nat\\lb_1\\HI1033-LB1\\app\\src\\main\\cpp\\nback.c\"",
+  "file": "C:\\Users\\Olivia Hultman\\Documents\\mobila_applikationer_och_tradlosa_nat\\lb_1\\HI1033-LB1\\app\\src\\main\\cpp\\nback.c"
+},
+{
+  "directory": "C:/Users/Olivia Hultman/Documents/mobila_applikationer_och_tradlosa_nat/lb_1/HI1033-LB1/app/.cxx/Debug/3e01z3q1/x86_64",
+  "command": "C:\\Users\\OLIVIA~1\\AppData\\Local\\Android\\Sdk\\ndk\\251~1.893\\TOOLCH~1\\llvm\\prebuilt\\WINDOW~1\\bin\\clang.exe --target=x86_64-none-linux-android26 --sysroot=\"C:/Users/Olivia Hultman/AppData/Local/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/sysroot\" -DJniBridge_EXPORTS -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -fno-limit-debug-info  -fPIC -o CMakeFiles\\JniBridge.dir\\JniBridge.c.o -c \"C:\\Users\\Olivia Hultman\\Documents\\mobila_applikationer_och_tradlosa_nat\\lb_1\\HI1033-LB1\\app\\src\\main\\cpp\\JniBridge.c\"",
+  "file": "C:\\Users\\Olivia Hultman\\Documents\\mobila_applikationer_och_tradlosa_nat\\lb_1\\HI1033-LB1\\app\\src\\main\\cpp\\JniBridge.c"
+}
+]

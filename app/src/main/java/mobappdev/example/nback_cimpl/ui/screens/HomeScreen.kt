@@ -29,9 +29,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import mobappdev.example.nback_cimpl.R
-import mobappdev.example.nback_cimpl.ui.viewmodels.FakeVM
+import mobappdev.example.nback_cimpl.ui.viewmodels.GameType
 import mobappdev.example.nback_cimpl.ui.viewmodels.GameViewModel
 
 /**
@@ -49,7 +50,8 @@ import mobappdev.example.nback_cimpl.ui.viewmodels.GameViewModel
 
 @Composable
 fun HomeScreen(
-    vm: GameViewModel
+    vm: GameViewModel,
+    navController: NavController
 ) {
     val highscore by vm.highscore.collectAsState()  // Highscore is its own StateFlow
     val gameState by vm.gameState.collectAsState()
@@ -111,6 +113,9 @@ fun HomeScreen(
                             message = "Hey! you clicked the audio button"
                         )
                     }
+                    vm.setGameType(GameType.Audio);
+                    vm.startGame();
+                    navController.navigate("game");
                 }) {
                     Icon(
                         painter = painterResource(id = R.drawable.sound_on),
@@ -129,6 +134,9 @@ fun HomeScreen(
                                 duration = SnackbarDuration.Short
                             )
                         }
+                        vm.setGameType(GameType.Visual);
+                        vm.startGame();
+                        navController.navigate("game");
                     }) {
                     Icon(
                         painter = painterResource(id = R.drawable.visual),
@@ -140,14 +148,5 @@ fun HomeScreen(
                 }
             }
         }
-    }
-}
-
-@Preview
-@Composable
-fun HomeScreenPreview() {
-    // Since I am injecting a VM into my homescreen that depends on Application context, the preview doesn't work.
-    Surface(){
-        HomeScreen(FakeVM())
     }
 }
