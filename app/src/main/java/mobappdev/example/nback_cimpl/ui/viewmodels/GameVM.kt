@@ -79,7 +79,7 @@ class GameVM(
         job?.cancel()  // Cancel any existing game loop
 
         // Get the events from our C-model (returns IntArray, so we need to convert to Array<Int>)
-        events = nBackHelper.generateNBackString(10, 9, 30, nBack).toList().toTypedArray()  // Todo Higher Grade: currently the size etc. are hardcoded, make these based on user input
+        events = nBackHelper.generateNBackString(30, 9, 30, nBack).toList().toTypedArray()  // Todo Higher Grade: currently the size etc. are hardcoded, make these based on user input
         Log.d("GameVM", "The following sequence was generated: ${events.contentToString()}")
 
         _score.value = 0;
@@ -108,7 +108,7 @@ class GameVM(
          */
         if (gameState.value.matchState == MatchState.NoMatch) {
             val eventNr = gameState.value.eventNr
-            if (eventNr - nBack - 1 > 0 && gameState.value.eventValue == events[eventNr - nBack - 1]) {
+            if (eventNr - nBack > 0 && gameState.value.eventValue == events[eventNr - nBack - 1]) {
                 _score.value++
                 _gameState.value = _gameState.value.copy(matchState = MatchState.CorrectMatch)
             } else {

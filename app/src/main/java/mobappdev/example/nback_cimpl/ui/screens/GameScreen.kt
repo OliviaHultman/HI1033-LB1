@@ -69,16 +69,24 @@ fun GameScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                modifier = Modifier.padding(32.dp),
-                text = "Score = $score",
-                style = MaterialTheme.typography.headlineLarge
-            )
-            Text(
-                modifier = Modifier.padding(16.dp),
-                text = "Event nr = ${gameState.eventNr}".uppercase(),
-                style = MaterialTheme.typography.displaySmall
-            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceAround,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    modifier = Modifier.padding(32.dp),
+                    text = "Score: $score",
+                    style = MaterialTheme.typography.headlineLarge
+                )
+                Text(
+                    modifier = Modifier.padding(16.dp),
+                    text = "Event: ${gameState.eventNr}",
+                    style = MaterialTheme.typography.headlineLarge
+                )
+            }
             Box(
                 modifier = Modifier
                     .height(400.dp)
@@ -117,7 +125,17 @@ fun GameScreen(
                 horizontalArrangement = Arrangement.SpaceAround,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Button(onClick = {
+                Button(
+                    enabled = when (gameState.gameType) {
+                        GameType.Audio, GameType.AudioVisual -> true
+                        GameType.Visual, GameType.None -> false
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = when (gameState.matchState) {
+                        MatchState.NoMatch -> Color.Blue
+                        MatchState.CorrectMatch -> Color.Green
+                        MatchState.WrongMatch -> Color.Red
+                    }),
+                    onClick = {
                     // Todo: change this button behaviour
                     if (gameState.gameType == GameType.Audio) {
                         vm.checkMatch();
@@ -132,8 +150,12 @@ fun GameScreen(
                     )
                 }
                 Button(
+                    enabled = when (gameState.gameType) {
+                        GameType.Visual, GameType.AudioVisual -> true
+                        GameType.Audio, GameType.None -> false
+                    },
                     colors = ButtonDefaults.buttonColors(containerColor = when (gameState.matchState) {
-                        MatchState.NoMatch -> Color.Blue
+                        MatchState.NoMatch -> Color.DarkGray
                         MatchState.CorrectMatch -> Color.Green
                         MatchState.WrongMatch -> Color.Red
                     }),
