@@ -62,7 +62,7 @@ class GameVM(
         get() = _highscore
 
     // nBack is currently hardcoded
-    override val nBack: Int = 2
+    override val nBack: Int = 1
 
     private var job: Job? = null  // coroutine job for the game event
     private val eventInterval: Long = 2000L  // 2000 ms (2s)
@@ -82,15 +82,22 @@ class GameVM(
         events = nBackHelper.generateNBackString(10, 9, 30, nBack).toList().toTypedArray()  // Todo Higher Grade: currently the size etc. are hardcoded, make these based on user input
         Log.d("GameVM", "The following sequence was generated: ${events.contentToString()}")
 
-        _gameState.value = _gameState.value.copy(eventValue = -1, eventNr = 0)
+        _score.value = 0;
+        _gameState.value = _gameState.value.copy(eventValue = -1, eventNr = 0, matchState = MatchState.NoMatch)
 
         job = viewModelScope.launch {
             when (gameState.value.gameType) {
                 GameType.Audio -> runAudioGame(events)
                 GameType.AudioVisual -> runAudioVisualGame()
                 GameType.Visual -> runVisualGame(events)
+                GameType.None -> Unit
             }
             // Todo: update the highscore
+            if (_score.value > _highscore.value) {
+                _highscore.value = _score.value
+                userPreferencesRepository.saveHighScore(_score.value)
+            }
+            _gameState.value = _gameState.value.copy(gameType = GameType.None)
         }
     }
 
@@ -99,10 +106,9 @@ class GameVM(
          * Todo: This function should check if there is a match when the user presses a match button
          * Make sure the user can only register a match once for each event.
          */
-        val eventValue = gameState.value.eventValue
-        val eventNr = gameState.value.eventNr
         if (gameState.value.matchState == MatchState.NoMatch) {
-            if (eventNr - nBack - 1 > 0 && eventValue == events[eventNr - nBack - 1]) {
+            val eventNr = gameState.value.eventNr
+            if (eventNr - nBack - 1 > 0 && gameState.value.eventValue == events[eventNr - nBack - 1]) {
                 _score.value++
                 _gameState.value = _gameState.value.copy(matchState = MatchState.CorrectMatch)
             } else {
@@ -154,7 +160,8 @@ class GameVM(
 enum class GameType{
     Audio,
     Visual,
-    AudioVisual
+    AudioVisual,
+    None
 }
 
 enum class MatchState{
@@ -168,5 +175,5 @@ data class GameState(
     val gameType: GameType = GameType.Visual,  // Type of the game
     val eventValue: Int = -1,  // The value of the array string
     val eventNr: Int = 0,
-    val matchState: MatchState = MatchState.NoMatch
+    val matchState: MatchState = MatchState.NoMatch,
 )

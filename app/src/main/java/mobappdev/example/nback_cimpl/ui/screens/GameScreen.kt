@@ -23,6 +23,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -49,7 +50,15 @@ fun GameScreen(
 ) {
     val score by vm.score.collectAsState()
     val gameState by vm.gameState.collectAsState()
-    var visualButtonColor by remember { mutableStateOf(Color.Blue) }
+
+    LaunchedEffect(gameState.gameType) {
+        if (gameState.gameType == GameType.None) {
+            navController.navigate("home");
+        }
+        else {
+            vm.startGame()
+        }
+    }
 
     Scaffold(
     ) {
@@ -111,7 +120,7 @@ fun GameScreen(
                 Button(onClick = {
                     // Todo: change this button behaviour
                     if (gameState.gameType == GameType.Audio) {
-
+                        vm.checkMatch();
                     }
                 }) {
                     Icon(

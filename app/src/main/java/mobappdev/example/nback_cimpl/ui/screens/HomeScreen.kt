@@ -114,7 +114,6 @@ fun HomeScreen(
                         )
                     }
                     vm.setGameType(GameType.Audio);
-                    vm.startGame();
                     navController.navigate("game");
                 }) {
                     Icon(
@@ -135,7 +134,6 @@ fun HomeScreen(
                             )
                         }
                         vm.setGameType(GameType.Visual);
-                        vm.startGame();
                         navController.navigate("game");
                     }) {
                     Icon(
