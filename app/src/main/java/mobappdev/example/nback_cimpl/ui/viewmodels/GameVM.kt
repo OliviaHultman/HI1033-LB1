@@ -101,15 +101,19 @@ class GameVM(
          */
         val eventValue = gameState.value.eventValue
         val eventNr = gameState.value.eventNr
-        if (eventValue != -1 && eventNr - nBack > 0 && eventValue == events[eventNr - nBack]) {
-            _score.value++
-            _gameState.value = _gameState.value.copy(eventValue = -1)
+        if (gameState.value.matchState == MatchState.NoMatch) {
+            if (eventNr - nBack - 1 > 0 && eventValue == events[eventNr - nBack - 1]) {
+                _score.value++
+                _gameState.value = _gameState.value.copy(matchState = MatchState.CorrectMatch)
+            } else {
+                _gameState.value = _gameState.value.copy(matchState = MatchState.WrongMatch)
+            }
         }
     }
     private suspend fun runAudioGame(events: Array<Int>) {
         // Todo: Make work for Basic grade
         for (value in events) {
-            _gameState.value = _gameState.value.copy(eventValue = value, eventNr = _gameState.value.eventNr + 1)
+            _gameState.value = _gameState.value.copy(eventValue = value, eventNr = _gameState.value.eventNr + 1, matchState = MatchState.NoMatch)
             delay(eventInterval)
         }
     }
@@ -117,7 +121,7 @@ class GameVM(
     private suspend fun runVisualGame(events: Array<Int>){
         // Todo: Replace this code for actual game code
         for (value in events) {
-            _gameState.value = _gameState.value.copy(eventValue = value, eventNr = _gameState.value.eventNr + 1)
+            _gameState.value = _gameState.value.copy(eventValue = value, eventNr = _gameState.value.eventNr + 1, matchState = MatchState.NoMatch)
             delay(eventInterval)
         }
 
@@ -153,9 +157,16 @@ enum class GameType{
     AudioVisual
 }
 
+enum class MatchState{
+    NoMatch,
+    CorrectMatch,
+    WrongMatch
+}
+
 data class GameState(
     // You can use this state to push values from the VM to your UI.
     val gameType: GameType = GameType.Visual,  // Type of the game
     val eventValue: Int = -1,  // The value of the array string
-    val eventNr: Int = 0
+    val eventNr: Int = 0,
+    val matchState: MatchState = MatchState.NoMatch
 )

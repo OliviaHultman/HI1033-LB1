@@ -40,6 +40,7 @@ import mobappdev.example.nback_cimpl.R
 import mobappdev.example.nback_cimpl.ui.viewmodels.GameState
 import mobappdev.example.nback_cimpl.ui.viewmodels.GameType
 import mobappdev.example.nback_cimpl.ui.viewmodels.GameViewModel
+import mobappdev.example.nback_cimpl.ui.viewmodels.MatchState
 
 @Composable
 fun GameScreen(
@@ -122,17 +123,15 @@ fun GameScreen(
                     )
                 }
                 Button(
-                    colors = ButtonDefaults.buttonColors(containerColor = visualButtonColor),
+                    colors = ButtonDefaults.buttonColors(containerColor = when (gameState.matchState) {
+                        MatchState.NoMatch -> Color.Blue
+                        MatchState.CorrectMatch -> Color.Green
+                        MatchState.WrongMatch -> Color.Red
+                    }),
                     onClick = {
                         // Todo: change this button behaviour
                         if (gameState.gameType == GameType.Visual) {
                             vm.checkMatch();
-                            if (gameState.eventValue == -1) {
-                                visualButtonColor = Color.Green;
-                            }
-                            else {
-                                visualButtonColor = Color.Red;
-                            }
                         }
                     }) {
                     Icon(

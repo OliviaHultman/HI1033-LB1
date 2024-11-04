@@ -4,14 +4,14 @@
   ],
   "cleanCommandsComponents": [
     [
-      "C:\\Users\\Olivia Hultman\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe",
+      "C:\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe",
       "-C",
       "C:\\Users\\Olivia Hultman\\Documents\\mobila_applikationer_och_tradlosa_nat\\lb_1\\HI1033-LB1\\app\\.cxx\\Debug\\2p6u2w5s\\x86",
       "clean"
     ]
   ],
   "buildTargetsCommandComponents": [
-    "C:\\Users\\Olivia Hultman\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe",
+    "C:\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe",
     "-C",
     "C:\\Users\\Olivia Hultman\\Documents\\mobila_applikationer_och_tradlosa_nat\\lb_1\\HI1033-LB1\\app\\.cxx\\Debug\\2p6u2w5s\\x86",
     "{LIST_OF_TARGETS_TO_BUILD}"
@@ -34,8 +34,8 @@
   },
   "toolchains": {
     "toolchain": {
-      "cCompilerExecutable": "C:\\Users\\Olivia Hultman\\AppData\\Local\\Android\\Sdk\\ndk\\27.0.12077973\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang.exe",
-      "cppCompilerExecutable": "C:\\Users\\Olivia Hultman\\AppData\\Local\\Android\\Sdk\\ndk\\27.0.12077973\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang++.exe"
+      "cCompilerExecutable": "C:\\Android\\Sdk\\ndk\\27.0.12077973\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang.exe",
+      "cppCompilerExecutable": "C:\\Android\\Sdk\\ndk\\27.0.12077973\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang++.exe"
     }
   },
   "cFileExtensions": [

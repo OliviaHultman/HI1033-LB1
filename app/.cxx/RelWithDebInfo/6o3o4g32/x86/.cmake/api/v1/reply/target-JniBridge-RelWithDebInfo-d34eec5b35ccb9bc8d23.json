@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "C:/Users/Olivia Hultman/Documents/mobila_applikationer_och_tradlosa_nat/lb_1/HI1033-LB1/app/build/intermediates/cxx/Debug/2p6u2w5s/obj/x86/libJniBridge.so"
+			"path" : "C:/Users/Olivia Hultman/Documents/mobila_applikationer_och_tradlosa_nat/lb_1/HI1033-LB1/app/build/intermediates/cxx/RelWithDebInfo/6o3o4g32/obj/x86/libJniBridge.so"
 		}
 	],
 	"backtrace" : 1,
@@ -42,7 +42,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -fno-limit-debug-info  -fPIC"
+					"fragment" : "-g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -O2 -g -DNDEBUG -fPIC"
 				}
 			],
 			"defines" : 
@@ -58,7 +58,7 @@
 			],
 			"sysroot" : 
 			{
-				"path" : "C:/Users/Olivia Hultman/AppData/Local/Android/Sdk/ndk/27.0.12077973/toolchains/llvm/prebuilt/windows-x86_64/sysroot"
+				"path" : "C:/Android/Sdk/ndk/27.0.12077973/toolchains/llvm/prebuilt/windows-x86_64/sysroot"
 			}
 		}
 	],
@@ -75,16 +75,16 @@
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "-static-libstdc++ -Wl,--build-id=sha1 -Wl,--no-rosegment -Wl,--no-undefined-version -Wl,--fatal-warnings -Wl,--no-undefined -Qunused-arguments",
+				"fragment" : "-static-libstdc++ -Wl,--build-id=sha1 -Wl,--no-rosegment -Wl,--no-undefined-version -Wl,--fatal-warnings -Wl,--no-undefined -Qunused-arguments  -Wl,--gc-sections",
 				"role" : "flags"
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "\"C:\\Users\\Olivia Hultman\\Documents\\mobila_applikationer_och_tradlosa_nat\\lb_1\\HI1033-LB1\\app\\build\\intermediates\\cxx\\Debug\\2p6u2w5s\\obj\\x86\\libnback_cimpl.so\"",
+				"fragment" : "\"C:\\Users\\Olivia Hultman\\Documents\\mobila_applikationer_och_tradlosa_nat\\lb_1\\HI1033-LB1\\app\\build\\intermediates\\cxx\\RelWithDebInfo\\6o3o4g32\\obj\\x86\\libnback_cimpl.so\"",
 				"role" : "libraries"
 			},
 			{
-				"fragment" : "\"C:\\Users\\Olivia Hultman\\AppData\\Local\\Android\\Sdk\\ndk\\27.0.12077973\\toolchains\\llvm\\prebuilt\\windows-x86_64\\sysroot\\usr\\lib\\i686-linux-android\\26\\liblog.so\"",
+				"fragment" : "C:\\Android\\Sdk\\ndk\\27.0.12077973\\toolchains\\llvm\\prebuilt\\windows-x86_64\\sysroot\\usr\\lib\\i686-linux-android\\26\\liblog.so",
 				"role" : "libraries"
 			},
 			{
@@ -95,7 +95,7 @@
 		"language" : "C",
 		"sysroot" : 
 		{
-			"path" : "C:/Users/Olivia Hultman/AppData/Local/Android/Sdk/ndk/27.0.12077973/toolchains/llvm/prebuilt/windows-x86_64/sysroot"
+			"path" : "C:/Android/Sdk/ndk/27.0.12077973/toolchains/llvm/prebuilt/windows-x86_64/sysroot"
 		}
 	},
 	"name" : "JniBridge",
