@@ -55,11 +55,8 @@ fun HomeScreen(
 ) {
     val highscore by vm.highscore.collectAsState()  // Highscore is its own StateFlow
     val gameState by vm.gameState.collectAsState()
-    val snackBarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
 
     Scaffold(
-        snackbarHost = { SnackbarHost(snackBarHostState) }
     ) {
         Column(
             modifier = Modifier
@@ -70,7 +67,7 @@ fun HomeScreen(
         ) {
             Text(
                 modifier = Modifier.padding(32.dp),
-                text = "High-Score = $highscore",
+                text = "High score: $highscore",
                 style = MaterialTheme.typography.headlineLarge
             )
             // Todo: You'll probably want to change this "BOX" part of the composable
@@ -82,21 +79,11 @@ fun HomeScreen(
                     Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    if (gameState.eventValue != -1) {
-                        Text(
-                            modifier = Modifier.fillMaxWidth(),
-                            text = "Current eventValue is: ${gameState.eventValue}",
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                    Button(onClick = vm::startGame) {
-                        Text(text = "Generate eventValues")
-                    }
                 }
             }
             Text(
                 modifier = Modifier.padding(16.dp),
-                text = "Start Game".uppercase(),
+                text = "Start game",
                 style = MaterialTheme.typography.displaySmall
             )
             Row(
@@ -108,11 +95,6 @@ fun HomeScreen(
             ) {
                 Button(onClick = {
                     // Todo: change this button behaviour
-                    scope.launch {
-                        snackBarHostState.showSnackbar(
-                            message = "Hey! you clicked the audio button"
-                        )
-                    }
                     vm.setGameType(GameType.Audio);
                     navController.navigate("game");
                 }) {
@@ -127,12 +109,6 @@ fun HomeScreen(
                 Button(
                     onClick = {
                         // Todo: change this button behaviour
-                        scope.launch {
-                            snackBarHostState.showSnackbar(
-                                message = "Hey! you clicked the visual button",
-                                duration = SnackbarDuration.Short
-                            )
-                        }
                         vm.setGameType(GameType.Visual);
                         navController.navigate("game");
                     }) {
