@@ -83,6 +83,11 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                Text(
+                    modifier = Modifier.padding(32.dp),
+                    text = "N-back game",
+                    style = MaterialTheme.typography.headlineLarge
+                )
                 Button(
                     onClick = {
                         showDialog = true;
@@ -170,7 +175,7 @@ fun HomeScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Button(
-                    modifier = Modifier.width(200.dp),
+                    modifier = Modifier.width(250.dp),
                     onClick = {
                         vm.setGameType(GameType.AudioVisual);
                         navController.navigate("game");
