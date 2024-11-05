@@ -1,6 +1,7 @@
 package mobappdev.example.nback_cimpl.ui.screens
 
 import android.speech.tts.TextToSpeech
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.Arrangement
@@ -52,9 +53,10 @@ fun GameScreen(
         }
     }
 
-    LaunchedEffect(gameState.eventValue) {
+    LaunchedEffect(gameState.eventNr) {
         if (gameState.gameType == GameType.Audio){
-            textToSpeech.speak((gameState.eventValue + 10).toChar().toString(), TextToSpeech.QUEUE_FLUSH, null, null )
+            Log.d("GameScreen", (gameState.eventValue - 1 + 'A'.code).toChar().toString())
+            textToSpeech.speak((gameState.eventValue - 1 + 'A'.code).toChar().toString(), TextToSpeech.QUEUE_FLUSH, null, null )
         }
     }
 

@@ -2,11 +2,13 @@ package mobappdev.example.nback_cimpl
 
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -52,7 +54,13 @@ class MainActivity : ComponentActivity() {
                     lateinit var textToSpeech : TextToSpeech;
                     textToSpeech = TextToSpeech(applicationContext) { status ->
                         if (status == TextToSpeech.SUCCESS) {
-                            textToSpeech.language = Locale.ENGLISH
+                            val result = textToSpeech.setLanguage(Locale.US)
+                            if (result == TextToSpeech.LANG_NOT_SUPPORTED || result == TextToSpeech.LANG_MISSING_DATA) {
+                                Log.d("MainActivity", "Text speech language not loaded")
+                            }
+                        }
+                        else {
+                            Log.d("MainActivity", "Text speech initialization failed")
                         }
                     }
 
