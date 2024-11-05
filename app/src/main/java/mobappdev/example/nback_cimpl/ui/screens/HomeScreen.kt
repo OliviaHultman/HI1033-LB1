@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -111,11 +112,6 @@ fun HomeScreen(
                 ) {
                 }
             }
-            Text(
-                modifier = Modifier.padding(16.dp),
-                text = "Start game",
-                style = MaterialTheme.typography.displaySmall
-            )
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -123,32 +119,89 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.SpaceAround,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Button(onClick = {
+                Button(
+                    modifier = Modifier.width(150.dp),
+                    onClick = {
                     // Todo: change this button behaviour
                     vm.setGameType(GameType.Audio);
                     navController.navigate("game");
                 }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.sound_on),
-                        contentDescription = "Sound",
-                        modifier = Modifier
-                            .height(48.dp)
-                            .aspectRatio(3f / 2f)
-                    )
+                    Column (
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text("Sound")
+                        Icon(
+                            painter = painterResource(id = R.drawable.sound_on),
+                            contentDescription = "Sound",
+                            modifier = Modifier
+                                .height(48.dp)
+                                .aspectRatio(3f / 2f)
+                        )
+                    }
                 }
                 Button(
+                    modifier = Modifier.width(150.dp),
                     onClick = {
                         // Todo: change this button behaviour
                         vm.setGameType(GameType.Visual);
                         navController.navigate("game");
                     }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.visual),
-                        contentDescription = "Visual",
-                        modifier = Modifier
-                            .height(48.dp)
-                            .aspectRatio(3f / 2f)
-                    )
+                    Column (
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text("Visual")
+                        Icon(
+                            painter = painterResource(id = R.drawable.visual),
+                            contentDescription = "Visual",
+                            modifier = Modifier
+                                .height(48.dp)
+                                .aspectRatio(3f / 2f)
+                        )
+                    }
+                }
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceAround,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Button(
+                    modifier = Modifier.width(200.dp),
+                    onClick = {
+                        vm.setGameType(GameType.AudioVisual);
+                        navController.navigate("game");
+                    }) {
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text("Combination")
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceAround,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.sound_on),
+                                contentDescription = "Sound",
+                                modifier = Modifier
+                                    .height(48.dp)
+                                    .aspectRatio(3f / 2f)
+                            )
+                            Icon(
+                                painter = painterResource(id = R.drawable.visual),
+                                contentDescription = "Visual",
+                                modifier = Modifier
+                                    .height(48.dp)
+                                    .aspectRatio(3f / 2f)
+                            )
+                        }
+                    }
                 }
             }
         }
