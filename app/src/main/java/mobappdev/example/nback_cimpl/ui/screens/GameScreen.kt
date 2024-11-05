@@ -41,7 +41,6 @@ fun GameScreen(
     navController: NavController,
     textToSpeech: TextToSpeech
 ) {
-    val score by vm.score.collectAsState();
     val gameState by vm.gameState.collectAsState()
 
     LaunchedEffect(gameState.gameType) {
@@ -54,9 +53,9 @@ fun GameScreen(
     }
 
     LaunchedEffect(gameState.eventNr) {
-        if (gameState.gameType == GameType.Audio){
-            Log.d("GameScreen", (gameState.eventValue - 1 + 'A'.code).toChar().toString())
-            textToSpeech.speak((gameState.eventValue - 1 + 'A'.code).toChar().toString(), TextToSpeech.QUEUE_FLUSH, null, null )
+        if (gameState.gameType == GameType.Audio || gameState.gameType == GameType.AudioVisual){
+            Log.d("GameScreen", (gameState.visualValue - 1 + 'A'.code).toChar().toString())
+            textToSpeech.speak((gameState.visualValue - 1 + 'A'.code).toChar().toString(), TextToSpeech.QUEUE_FLUSH, null, null )
         }
     }
 
@@ -77,8 +76,8 @@ fun GameScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    modifier = Modifier.padding(32.dp),
-                    text = "Score: $score",
+                    modifier = Modifier.padding(16.dp),
+                    text = "Score: ${gameState.score}",
                     style = MaterialTheme.typography.headlineLarge
                 )
                 Text(
@@ -104,7 +103,9 @@ fun GameScreen(
                         ) {
                             repeat(3) { col ->
                                 var background = Color.LightGray
-                                if (gameState.gameType == GameType.Visual && (col + 1) + 3 * row == gameState.eventValue) {
+                                if (gameState.gameType == GameType.Visual ||
+                                    gameState.gameType == GameType.AudioVisual &&
+                                    (col + 1) + 3 * row == gameState.visualValue) {
                                     background = Color.DarkGray
                                 }
                                 Box(
@@ -137,7 +138,7 @@ fun GameScreen(
                     }),
                     onClick = {
                     // Todo: change this button behaviour
-                    if (gameState.gameType == GameType.Audio) {
+                    if (gameState.gameType == GameType.Audio || gameState.gameType == GameType.AudioVisual) {
                         vm.checkMatch();
                     }
                 }) {
@@ -161,7 +162,7 @@ fun GameScreen(
                     }),
                     onClick = {
                         // Todo: change this button behaviour
-                        if (gameState.gameType == GameType.Visual) {
+                        if (gameState.gameType == GameType.Visual || gameState.gameType == GameType.AudioVisual) {
                             vm.checkMatch();
                         }
                     }) {

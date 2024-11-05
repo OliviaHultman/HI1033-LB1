@@ -37,7 +37,6 @@ import mobappdev.example.nback_cimpl.data.UserPreferencesRepository
 interface GameViewModel {
     val gameState: StateFlow<GameState>
     val settings: StateFlow<Settings>
-    val score: StateFlow<Int>
     val highscore: StateFlow<Int>
     val nBack: Int
 
@@ -63,10 +62,6 @@ class GameVM(
     override val settings: StateFlow<Settings>
         get() = _settings.asStateFlow()
 
-    private val _score = MutableStateFlow(0)
-    override val score: StateFlow<Int>
-        get() = _score
-
     private val _highscore = MutableStateFlow(0)
     override val highscore: StateFlow<Int>
         get() = _highscore
@@ -78,7 +73,8 @@ class GameVM(
     private val eventInterval: Long = 2000L  // 2000 ms (2s)
 
     private val nBackHelper = NBackHelper()  // Helper that generate the event array
-    private var events = emptyArray<Int>()  // Array with all events
+    private var visualEvents = emptyArray<Int>()
+    private var audioEvents = emptyArray<Int>()  // Array with all events
 
     override fun setGameType(gameType: GameType) {
         // update the gametype in the gamestate
@@ -108,24 +104,35 @@ class GameVM(
     override fun startGame() {
         job?.cancel()  // Cancel any existing game loop
 
-        // Get the events from our C-model (returns IntArray, so we need to convert to Array<Int>)
-        events = nBackHelper.generateNBackString(30, 9, 30, nBack).toList().toTypedArray()  // Todo Higher Grade: currently the size etc. are hardcoded, make these based on user input
-        Log.d("GameVM", "The following sequence was generated: ${events.contentToString()}")
-
-        _score.value = 0;
-        _gameState.value = _gameState.value.copy(eventValue = -1, eventNr = 0, matchStatus = MatchStatus.None)
+        _gameState.value = _gameState.value.copy(visualValue = -1, audioValue = -1, eventNr = 0, matchStatus = MatchStatus.None, score = 0)
 
         job = viewModelScope.launch {
             when (gameState.value.gameType) {
-                GameType.Audio -> runAudioGame(events)
-                GameType.AudioVisual -> runAudioVisualGame()
-                GameType.Visual -> runVisualGame(events)
+                GameType.Audio -> {
+                    // Get the events from our C-model (returns IntArray, so we need to convert to Array<Int>)
+                    audioEvents = nBackHelper.generateNBackString(40, 9, 30, nBack).toList().toTypedArray()  // Todo Higher Grade: currently the size etc. are hardcoded, make these based on user input
+                    Log.d("GameVM", "The following audio sequence was generated: ${audioEvents.contentToString()}")
+                    runAudioGame(audioEvents)
+                }
+                GameType.AudioVisual -> {
+                    // Get the events from our C-model (returns IntArray, so we need to convert to Array<Int>)
+                    visualEvents = nBackHelper.generateNBackString(40, 9, 30, nBack).toList().toTypedArray()  // Todo Higher Grade: currently the size etc. are hardcoded, make these based on user input
+                    Log.d("GameVM", "The following visual sequence was generated: ${visualEvents.contentToString()}")
+                    audioEvents = nBackHelper.generateNBackString(40, 9, 30, nBack).toList().toTypedArray()  // Todo Higher Grade: currently the size etc. are hardcoded, make these based on user input
+                    Log.d("GameVM", "The following audio sequence was generated: ${audioEvents.contentToString()}")
+                    runAudioVisualGame(visualEvents, audioEvents)
+                }
+                GameType.Visual -> {
+                    // Get the events from our C-model (returns IntArray, so we need to convert to Array<Int>)
+                    visualEvents = nBackHelper.generateNBackString(40, 9, 30, nBack).toList().toTypedArray()  // Todo Higher Grade: currently the size etc. are hardcoded, make these based on user input
+                    Log.d("GameVM", "The following visual sequence was generated: ${visualEvents.contentToString()}")
+                    runVisualGame(visualEvents)
+                }
                 GameType.None -> Unit
             }
             // Todo: update the highscore
-            if (_score.value > _highscore.value) {
-                _highscore.value = _score.value
-                userPreferencesRepository.saveHighScore(_score.value)
+            if (gameState.value.score > _highscore.value) {
+                userPreferencesRepository.saveHighScore(_gameState.value.score)
             }
             _gameState.value = _gameState.value.copy(gameType = GameType.None)
         }
@@ -136,11 +143,22 @@ class GameVM(
          * Todo: This function should check if there is a match when the user presses a match button
          * Make sure the user can only register a match once for each event.
          */
-        if (gameState.value.matchStatus == MatchStatus.None) {
-            val eventNr = gameState.value.eventNr
-            if (eventNr - nBack > 0 && gameState.value.eventValue == events[eventNr - nBack - 1]) {
-                _score.value++
-                _gameState.value = _gameState.value.copy(matchStatus = MatchStatus.Correct)
+        val nBackIndex = gameState.value.eventNr - nBack - 1;
+        if (gameState.value.gameType != GameType.None &&
+            gameState.value.matchStatus == MatchStatus.None && nBackIndex >= 0) {
+            var match: Boolean = true
+            if (gameState.value.gameType == GameType.Visual ||
+                gameState.value.gameType == GameType.AudioVisual &&
+                gameState.value.visualValue != visualEvents[nBackIndex]) {
+                    match = false
+            }
+            if (gameState.value.gameType == GameType.Audio ||
+                gameState.value.gameType == GameType.AudioVisual &&
+                gameState.value.audioValue != audioEvents[nBackIndex]) {
+                match = false
+            }
+            if (match) {
+                _gameState.value = _gameState.value.copy(matchStatus = MatchStatus.Correct, score = gameState.value.score + 1)
             } else {
                 _gameState.value = _gameState.value.copy(matchStatus = MatchStatus.Wrong)
             }
@@ -149,7 +167,7 @@ class GameVM(
     private suspend fun runAudioGame(events: Array<Int>) {
         // Todo: Make work for Basic grade
         for (value in events) {
-            _gameState.value = _gameState.value.copy(eventValue = value, eventNr = _gameState.value.eventNr + 1, matchStatus = MatchStatus.None)
+            _gameState.value = _gameState.value.copy(audioValue = value - 1 + 'A'.code, eventNr = _gameState.value.eventNr + 1, matchStatus = MatchStatus.None)
             delay(eventInterval)
         }
     }
@@ -157,14 +175,18 @@ class GameVM(
     private suspend fun runVisualGame(events: Array<Int>){
         // Todo: Replace this code for actual game code
         for (value in events) {
-            _gameState.value = _gameState.value.copy(eventValue = value, eventNr = _gameState.value.eventNr + 1, matchStatus = MatchStatus.None)
+            _gameState.value = _gameState.value.copy(visualValue = value, eventNr = _gameState.value.eventNr + 1, matchStatus = MatchStatus.None)
             delay(eventInterval)
         }
 
     }
 
-    private fun runAudioVisualGame(){
+    private suspend fun runAudioVisualGame(visualEvents: Array<Int>, audioEvents: Array<Int>){
         // Todo: Make work for Higher grade
+        for (i in 0 until minOf(visualEvents.size, audioEvents.size)) {
+            _gameState.value = _gameState.value.copy(visualValue = visualEvents[i], audioValue = audioEvents[i] - 1 + 'A'.code, eventNr = _gameState.value.eventNr + 1, matchStatus = MatchStatus.None)
+            delay(eventInterval)
+        }
     }
 
     companion object {
@@ -212,7 +234,9 @@ data class Settings(
 data class GameState(
     // You can use this state to push values from the VM to your UI.
     val gameType: GameType = GameType.Visual,  // Type of the game
-    val eventValue: Int = -1,  // The value of the array string
+    val visualValue: Int = -1,  // The value of the array string
+    val audioValue: Int = -1,
     val eventNr: Int = 0,
     val matchStatus: MatchStatus = MatchStatus.None,
+    val score: Int = 0
 )
