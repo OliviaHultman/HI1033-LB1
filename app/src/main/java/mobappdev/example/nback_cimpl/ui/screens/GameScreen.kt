@@ -33,7 +33,7 @@ import androidx.navigation.NavController
 import mobappdev.example.nback_cimpl.R
 import mobappdev.example.nback_cimpl.ui.viewmodels.GameType
 import mobappdev.example.nback_cimpl.ui.viewmodels.GameViewModel
-import mobappdev.example.nback_cimpl.ui.viewmodels.MatchState
+import mobappdev.example.nback_cimpl.ui.viewmodels.MatchStatus
 
 @Composable
 fun GameScreen(
@@ -130,10 +130,10 @@ fun GameScreen(
                         GameType.Audio, GameType.AudioVisual -> true
                         GameType.Visual, GameType.None -> false
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = when (gameState.matchState) {
-                        MatchState.None -> Color.DarkGray
-                        MatchState.Correct -> Color.Green
-                        MatchState.Wrong -> Color.Red
+                    colors = ButtonDefaults.buttonColors(containerColor = when (gameState.matchStatus) {
+                        MatchStatus.None -> Color.DarkGray
+                        MatchStatus.Correct -> Color.Green
+                        MatchStatus.Wrong -> Color.Red
                     }),
                     onClick = {
                     // Todo: change this button behaviour
@@ -154,10 +154,10 @@ fun GameScreen(
                         GameType.Visual, GameType.AudioVisual -> true
                         GameType.Audio, GameType.None -> false
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = when (gameState.matchState) {
-                        MatchState.None -> Color.DarkGray
-                        MatchState.Correct -> Color.Green
-                        MatchState.Wrong -> Color.Red
+                    colors = ButtonDefaults.buttonColors(containerColor = when (gameState.matchStatus) {
+                        MatchStatus.None -> Color.DarkGray
+                        MatchStatus.Correct -> Color.Green
+                        MatchStatus.Wrong -> Color.Red
                     }),
                     onClick = {
                         // Todo: change this button behaviour

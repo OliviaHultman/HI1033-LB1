@@ -36,11 +36,17 @@ import mobappdev.example.nback_cimpl.data.UserPreferencesRepository
 
 interface GameViewModel {
     val gameState: StateFlow<GameState>
+    val settings: StateFlow<Settings>
     val score: StateFlow<Int>
     val highscore: StateFlow<Int>
     val nBack: Int
 
     fun setGameType(gameType: GameType)
+    fun setSize(size: Int)
+    fun setEventInterval(eventInterval: Long)
+    fun setNBack(nBack: Int)
+    fun setVisualCombinations(visualCombinations: Int)
+    fun setAudioCombinations(audioCombinations: Int)
     fun startGame()
 
     fun checkMatch()
@@ -52,6 +58,10 @@ class GameVM(
     private val _gameState = MutableStateFlow(GameState())
     override val gameState: StateFlow<GameState>
         get() = _gameState.asStateFlow()
+
+    private val _settings = MutableStateFlow(Settings())
+    override val settings: StateFlow<Settings>
+        get() = _settings.asStateFlow()
 
     private val _score = MutableStateFlow(0)
     override val score: StateFlow<Int>
@@ -75,6 +85,26 @@ class GameVM(
         _gameState.value = _gameState.value.copy(gameType = gameType)
     }
 
+    override fun setSize(size: Int) {
+        _settings.value = _settings.value.copy(size = size)
+    }
+
+    override fun setEventInterval(eventInterval: Long) {
+        _settings.value = _settings.value.copy(eventInterval = eventInterval)
+    }
+
+    override fun setNBack(nBack: Int) {
+        _settings.value = _settings.value.copy(nBack = nBack)
+    }
+
+    override fun setVisualCombinations(visualCombinations: Int) {
+        _settings.value = _settings.value.copy(visualCombinations = visualCombinations)
+    }
+
+    override fun setAudioCombinations(audioCombinations: Int) {
+        _settings.value = _settings.value.copy(audioCombinations = audioCombinations)
+    }
+
     override fun startGame() {
         job?.cancel()  // Cancel any existing game loop
 
@@ -83,7 +113,7 @@ class GameVM(
         Log.d("GameVM", "The following sequence was generated: ${events.contentToString()}")
 
         _score.value = 0;
-        _gameState.value = _gameState.value.copy(eventValue = -1, eventNr = 0, matchState = MatchState.None)
+        _gameState.value = _gameState.value.copy(eventValue = -1, eventNr = 0, matchStatus = MatchStatus.None)
 
         job = viewModelScope.launch {
             when (gameState.value.gameType) {
@@ -106,20 +136,20 @@ class GameVM(
          * Todo: This function should check if there is a match when the user presses a match button
          * Make sure the user can only register a match once for each event.
          */
-        if (gameState.value.matchState == MatchState.None) {
+        if (gameState.value.matchStatus == MatchStatus.None) {
             val eventNr = gameState.value.eventNr
             if (eventNr - nBack > 0 && gameState.value.eventValue == events[eventNr - nBack - 1]) {
                 _score.value++
-                _gameState.value = _gameState.value.copy(matchState = MatchState.Correct)
+                _gameState.value = _gameState.value.copy(matchStatus = MatchStatus.Correct)
             } else {
-                _gameState.value = _gameState.value.copy(matchState = MatchState.Wrong)
+                _gameState.value = _gameState.value.copy(matchStatus = MatchStatus.Wrong)
             }
         }
     }
     private suspend fun runAudioGame(events: Array<Int>) {
         // Todo: Make work for Basic grade
         for (value in events) {
-            _gameState.value = _gameState.value.copy(eventValue = value, eventNr = _gameState.value.eventNr + 1, matchState = MatchState.None)
+            _gameState.value = _gameState.value.copy(eventValue = value, eventNr = _gameState.value.eventNr + 1, matchStatus = MatchStatus.None)
             delay(eventInterval)
         }
     }
@@ -127,7 +157,7 @@ class GameVM(
     private suspend fun runVisualGame(events: Array<Int>){
         // Todo: Replace this code for actual game code
         for (value in events) {
-            _gameState.value = _gameState.value.copy(eventValue = value, eventNr = _gameState.value.eventNr + 1, matchState = MatchState.None)
+            _gameState.value = _gameState.value.copy(eventValue = value, eventNr = _gameState.value.eventNr + 1, matchStatus = MatchStatus.None)
             delay(eventInterval)
         }
 
@@ -164,16 +194,25 @@ enum class GameType{
     None
 }
 
-enum class MatchState{
+enum class MatchStatus{
     None,
     Correct,
     Wrong
 }
+
+data class Settings(
+    val size: Int = 10,
+    val eventInterval: Long = 2000L,
+    val nBack: Int = 2,
+    val visualCombinations: Int = 9,
+    val audioCombinations: Int = 9,
+
+)
 
 data class GameState(
     // You can use this state to push values from the VM to your UI.
     val gameType: GameType = GameType.Visual,  // Type of the game
     val eventValue: Int = -1,  // The value of the array string
     val eventNr: Int = 0,
-    val matchState: MatchState = MatchState.None,
+    val matchStatus: MatchStatus = MatchStatus.None,
 )
