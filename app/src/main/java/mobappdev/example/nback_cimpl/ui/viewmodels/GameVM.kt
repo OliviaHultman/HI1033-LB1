@@ -83,7 +83,7 @@ class GameVM(
         Log.d("GameVM", "The following sequence was generated: ${events.contentToString()}")
 
         _score.value = 0;
-        _gameState.value = _gameState.value.copy(eventValue = -1, eventNr = 0, matchState = MatchState.NoMatch)
+        _gameState.value = _gameState.value.copy(eventValue = -1, eventNr = 0, matchState = MatchState.None)
 
         job = viewModelScope.launch {
             when (gameState.value.gameType) {
@@ -106,20 +106,20 @@ class GameVM(
          * Todo: This function should check if there is a match when the user presses a match button
          * Make sure the user can only register a match once for each event.
          */
-        if (gameState.value.matchState == MatchState.NoMatch) {
+        if (gameState.value.matchState == MatchState.None) {
             val eventNr = gameState.value.eventNr
             if (eventNr - nBack > 0 && gameState.value.eventValue == events[eventNr - nBack - 1]) {
                 _score.value++
-                _gameState.value = _gameState.value.copy(matchState = MatchState.CorrectMatch)
+                _gameState.value = _gameState.value.copy(matchState = MatchState.Correct)
             } else {
-                _gameState.value = _gameState.value.copy(matchState = MatchState.WrongMatch)
+                _gameState.value = _gameState.value.copy(matchState = MatchState.Wrong)
             }
         }
     }
     private suspend fun runAudioGame(events: Array<Int>) {
         // Todo: Make work for Basic grade
         for (value in events) {
-            _gameState.value = _gameState.value.copy(eventValue = value, eventNr = _gameState.value.eventNr + 1, matchState = MatchState.NoMatch)
+            _gameState.value = _gameState.value.copy(eventValue = value, eventNr = _gameState.value.eventNr + 1, matchState = MatchState.None)
             delay(eventInterval)
         }
     }
@@ -127,7 +127,7 @@ class GameVM(
     private suspend fun runVisualGame(events: Array<Int>){
         // Todo: Replace this code for actual game code
         for (value in events) {
-            _gameState.value = _gameState.value.copy(eventValue = value, eventNr = _gameState.value.eventNr + 1, matchState = MatchState.NoMatch)
+            _gameState.value = _gameState.value.copy(eventValue = value, eventNr = _gameState.value.eventNr + 1, matchState = MatchState.None)
             delay(eventInterval)
         }
 
@@ -165,9 +165,9 @@ enum class GameType{
 }
 
 enum class MatchState{
-    NoMatch,
-    CorrectMatch,
-    WrongMatch
+    None,
+    Correct,
+    Wrong
 }
 
 data class GameState(
@@ -175,5 +175,5 @@ data class GameState(
     val gameType: GameType = GameType.Visual,  // Type of the game
     val eventValue: Int = -1,  // The value of the array string
     val eventNr: Int = 0,
-    val matchState: MatchState = MatchState.NoMatch,
+    val matchState: MatchState = MatchState.None,
 )

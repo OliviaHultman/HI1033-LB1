@@ -1,6 +1,7 @@
 package mobappdev.example.nback_cimpl
 
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +18,7 @@ import mobappdev.example.nback_cimpl.ui.screens.GameScreen
 import mobappdev.example.nback_cimpl.ui.screens.HomeScreen
 import mobappdev.example.nback_cimpl.ui.theme.NBack_CImplTheme
 import mobappdev.example.nback_cimpl.ui.viewmodels.GameVM
+import java.util.Locale
 
 /**
  * This is the MainActivity of the application
@@ -47,6 +49,13 @@ class MainActivity : ComponentActivity() {
                         factory = GameVM.Factory
                     )
 
+                    lateinit var textToSpeech : TextToSpeech;
+                    textToSpeech = TextToSpeech(applicationContext) { status ->
+                        if (status == TextToSpeech.SUCCESS) {
+                            textToSpeech.language = Locale.ENGLISH
+                        }
+                    }
+
                     // Instantiate the homescreen
                     val navController : NavController = rememberNavController();
                     NavHost(navController = navController as NavHostController, startDestination = "home") {
@@ -54,7 +63,7 @@ class MainActivity : ComponentActivity() {
                             HomeScreen(vm = gameViewModel, navController = navController)
                         }
                         composable("game") {
-                            GameScreen(vm = gameViewModel, navController = navController)
+                            GameScreen(vm = gameViewModel, navController = navController, textToSpeech = textToSpeech)
                         }
                     }
                 }

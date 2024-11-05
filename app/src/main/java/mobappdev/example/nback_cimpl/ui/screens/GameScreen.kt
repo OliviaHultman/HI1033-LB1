@@ -1,5 +1,6 @@
 package mobappdev.example.nback_cimpl.ui.screens
 
+import android.speech.tts.TextToSpeech
 import androidx.compose.foundation.background
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.Arrangement
@@ -18,27 +19,17 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import kotlinx.coroutines.launch
 import mobappdev.example.nback_cimpl.R
-import mobappdev.example.nback_cimpl.ui.viewmodels.GameState
 import mobappdev.example.nback_cimpl.ui.viewmodels.GameType
 import mobappdev.example.nback_cimpl.ui.viewmodels.GameViewModel
 import mobappdev.example.nback_cimpl.ui.viewmodels.MatchState
@@ -46,9 +37,10 @@ import mobappdev.example.nback_cimpl.ui.viewmodels.MatchState
 @Composable
 fun GameScreen(
     vm: GameViewModel,
-    navController: NavController
+    navController: NavController,
+    textToSpeech: TextToSpeech
 ) {
-    val score by vm.score.collectAsState()
+    val score by vm.score.collectAsState();
     val gameState by vm.gameState.collectAsState()
 
     LaunchedEffect(gameState.gameType) {
@@ -57,6 +49,12 @@ fun GameScreen(
         }
         else {
             vm.startGame()
+        }
+    }
+
+    LaunchedEffect(gameState.eventValue) {
+        if (gameState.gameType == GameType.Audio){
+            textToSpeech.speak((gameState.eventValue + 10).toChar().toString(), TextToSpeech.QUEUE_FLUSH, null, null )
         }
     }
 
@@ -104,7 +102,7 @@ fun GameScreen(
                         ) {
                             repeat(3) { col ->
                                 var background = Color.LightGray
-                                if ((col + 1) + 3 * row == gameState.eventValue) {
+                                if (gameState.gameType == GameType.Visual && (col + 1) + 3 * row == gameState.eventValue) {
                                     background = Color.DarkGray
                                 }
                                 Box(
@@ -131,9 +129,9 @@ fun GameScreen(
                         GameType.Visual, GameType.None -> false
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = when (gameState.matchState) {
-                        MatchState.NoMatch -> Color.Blue
-                        MatchState.CorrectMatch -> Color.Green
-                        MatchState.WrongMatch -> Color.Red
+                        MatchState.None -> Color.DarkGray
+                        MatchState.Correct -> Color.Green
+                        MatchState.Wrong -> Color.Red
                     }),
                     onClick = {
                     // Todo: change this button behaviour
@@ -155,9 +153,9 @@ fun GameScreen(
                         GameType.Audio, GameType.None -> false
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = when (gameState.matchState) {
-                        MatchState.NoMatch -> Color.DarkGray
-                        MatchState.CorrectMatch -> Color.Green
-                        MatchState.WrongMatch -> Color.Red
+                        MatchState.None -> Color.DarkGray
+                        MatchState.Correct -> Color.Green
+                        MatchState.Wrong -> Color.Red
                     }),
                     onClick = {
                         // Todo: change this button behaviour
