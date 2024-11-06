@@ -48,7 +48,8 @@ interface GameViewModel {
     fun setAudioCombinations(audioCombinations: Int)
     fun startGame()
 
-    fun checkMatch()
+    fun checkVisualMatch()
+    fun checkAudioMatch()
 }
 
 class GameVM(
@@ -104,7 +105,7 @@ class GameVM(
     override fun startGame() {
         job?.cancel()  // Cancel any existing game loop
 
-        _gameState.value = _gameState.value.copy(visualValue = -1, audioValue = -1, eventNr = 0, matchStatus = MatchStatus.None, score = 0)
+        _gameState.value = _gameState.value.copy(visualValue = -1, audioValue = -1, eventNr = 0, visualMatchStatus = MatchStatus.None, audioMatchStatus = MatchStatus.None, score = 0)
 
         job = viewModelScope.launch {
             when (gameState.value.gameType) {
@@ -138,36 +139,42 @@ class GameVM(
         }
     }
 
-    override fun checkMatch() {
+    override fun checkVisualMatch() {
         /**
          * Todo: This function should check if there is a match when the user presses a match button
          * Make sure the user can only register a match once for each event.
          */
         val nBackIndex = gameState.value.eventNr - nBack - 1;
-        if (gameState.value.gameType != GameType.None &&
-            gameState.value.matchStatus == MatchStatus.None && nBackIndex >= 0) {
-            var match: Boolean = true
-            if (gameState.value.gameType == GameType.Visual ||
-                gameState.value.gameType == GameType.AudioVisual &&
-                gameState.value.visualValue != visualEvents[nBackIndex]) {
-                    match = false
+        if (gameState.value.visualMatchStatus == MatchStatus.None && nBackIndex >= 0) {
+            if (gameState.value.visualValue != visualEvents[nBackIndex]) {
+                _gameState.value = _gameState.value.copy(visualMatchStatus = MatchStatus.Correct, score = gameState.value.score + 1)
             }
-            if (gameState.value.gameType == GameType.Audio ||
-                gameState.value.gameType == GameType.AudioVisual &&
-                gameState.value.audioValue != audioEvents[nBackIndex]) {
-                match = false
-            }
-            if (match) {
-                _gameState.value = _gameState.value.copy(matchStatus = MatchStatus.Correct, score = gameState.value.score + 1)
-            } else {
-                _gameState.value = _gameState.value.copy(matchStatus = MatchStatus.Wrong)
+            else {
+                _gameState.value = _gameState.value.copy(visualMatchStatus = MatchStatus.Wrong)
             }
         }
     }
+
+    override fun checkAudioMatch() {
+        /**
+         * Todo: This function should check if there is a match when the user presses a match button
+         * Make sure the user can only register a match once for each event.
+         */
+        val nBackIndex = gameState.value.eventNr - nBack - 1;
+        if (gameState.value.audioMatchStatus == MatchStatus.None && nBackIndex >= 0) {
+            if (gameState.value.audioValue != audioEvents[nBackIndex]) {
+                _gameState.value = _gameState.value.copy(audioMatchStatus = MatchStatus.Correct, score = gameState.value.score + 1)
+            }
+            else {
+                _gameState.value = _gameState.value.copy(audioMatchStatus = MatchStatus.Wrong)
+            }
+        }
+    }
+
     private suspend fun runAudioGame(events: Array<Int>) {
         // Todo: Make work for Basic grade
         for (value in events) {
-            _gameState.value = _gameState.value.copy(audioValue = value - 1 + 'A'.code, eventNr = _gameState.value.eventNr + 1, matchStatus = MatchStatus.None)
+            _gameState.value = _gameState.value.copy(audioValue = value - 1 + 'A'.code, eventNr = _gameState.value.eventNr + 1, visualMatchStatus = MatchStatus.None)
             delay(eventInterval)
         }
     }
@@ -175,7 +182,7 @@ class GameVM(
     private suspend fun runVisualGame(events: Array<Int>){
         // Todo: Replace this code for actual game code
         for (value in events) {
-            _gameState.value = _gameState.value.copy(visualValue = value, eventNr = _gameState.value.eventNr + 1, matchStatus = MatchStatus.None)
+            _gameState.value = _gameState.value.copy(visualValue = value, eventNr = _gameState.value.eventNr + 1, visualMatchStatus = MatchStatus.None)
             delay(eventInterval)
         }
 
@@ -184,7 +191,7 @@ class GameVM(
     private suspend fun runAudioVisualGame(visualEvents: Array<Int>, audioEvents: Array<Int>){
         // Todo: Make work for Higher grade
         for (i in 0 until minOf(visualEvents.size, audioEvents.size)) {
-            _gameState.value = _gameState.value.copy(visualValue = visualEvents[i], audioValue = audioEvents[i] - 1 + 'A'.code, eventNr = _gameState.value.eventNr + 1, matchStatus = MatchStatus.None)
+            _gameState.value = _gameState.value.copy(visualValue = visualEvents[i], audioValue = audioEvents[i] - 1 + 'A'.code, eventNr = _gameState.value.eventNr + 1, visualMatchStatus = MatchStatus.None)
             delay(eventInterval)
         }
     }
@@ -237,6 +244,7 @@ data class GameState(
     val visualValue: Int = -1,  // The value of the array string
     val audioValue: Int = -1,
     val eventNr: Int = 0,
-    val matchStatus: MatchStatus = MatchStatus.None,
+    val visualMatchStatus: MatchStatus = MatchStatus.None,
+    val audioMatchStatus: MatchStatus = MatchStatus.None,
     val score: Int = 0
 )

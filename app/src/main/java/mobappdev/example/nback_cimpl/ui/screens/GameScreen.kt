@@ -131,7 +131,7 @@ fun GameScreen(
                         GameType.Audio, GameType.AudioVisual -> true
                         GameType.Visual, GameType.None -> false
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = when (gameState.matchStatus) {
+                    colors = ButtonDefaults.buttonColors(containerColor = when (gameState.audioMatchStatus) {
                         MatchStatus.None -> Color.DarkGray
                         MatchStatus.Correct -> Color.Green
                         MatchStatus.Wrong -> Color.Red
@@ -139,7 +139,7 @@ fun GameScreen(
                     onClick = {
                     // Todo: change this button behaviour
                     if (gameState.gameType == GameType.Audio || gameState.gameType == GameType.AudioVisual) {
-                        vm.checkMatch();
+                        vm.checkAudioMatch();
                     }
                 }) {
                     Icon(
@@ -155,7 +155,7 @@ fun GameScreen(
                         GameType.Visual, GameType.AudioVisual -> true
                         GameType.Audio, GameType.None -> false
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = when (gameState.matchStatus) {
+                    colors = ButtonDefaults.buttonColors(containerColor = when (gameState.visualMatchStatus) {
                         MatchStatus.None -> Color.DarkGray
                         MatchStatus.Correct -> Color.Green
                         MatchStatus.Wrong -> Color.Red
@@ -163,7 +163,7 @@ fun GameScreen(
                     onClick = {
                         // Todo: change this button behaviour
                         if (gameState.gameType == GameType.Visual || gameState.gameType == GameType.AudioVisual) {
-                            vm.checkMatch();
+                            vm.checkVisualMatch();
                         }
                     }) {
                     Icon(
