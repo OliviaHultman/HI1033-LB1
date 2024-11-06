@@ -54,8 +54,8 @@ fun GameScreen(
 
     LaunchedEffect(gameState.eventNr) {
         if (gameState.gameType == GameType.Audio || gameState.gameType == GameType.AudioVisual){
-            Log.d("GameScreen", (gameState.visualValue - 1 + 'A'.code).toChar().toString())
-            textToSpeech.speak((gameState.visualValue - 1 + 'A'.code).toChar().toString(), TextToSpeech.QUEUE_FLUSH, null, null )
+            Log.d("GameScreen", (gameState.audioValue - 1 + 'A'.code).toChar().toString())
+            textToSpeech.speak((gameState.audioValue - 1 + 'A'.code).toChar().toString(), TextToSpeech.QUEUE_FLUSH, null, null )
         }
     }
 
@@ -103,8 +103,8 @@ fun GameScreen(
                         ) {
                             repeat(3) { col ->
                                 var background = Color.LightGray
-                                if (gameState.gameType == GameType.Visual ||
-                                    gameState.gameType == GameType.AudioVisual &&
+                                if ((gameState.gameType == GameType.Visual ||
+                                    gameState.gameType == GameType.AudioVisual) &&
                                     (col + 1) + 3 * row == gameState.visualValue) {
                                     background = Color.DarkGray
                                 }
