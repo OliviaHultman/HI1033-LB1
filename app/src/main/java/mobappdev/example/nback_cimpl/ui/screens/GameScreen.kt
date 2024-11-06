@@ -34,6 +34,7 @@ import mobappdev.example.nback_cimpl.R
 import mobappdev.example.nback_cimpl.ui.viewmodels.GameType
 import mobappdev.example.nback_cimpl.ui.viewmodels.GameViewModel
 import mobappdev.example.nback_cimpl.ui.viewmodels.MatchStatus
+import kotlin.math.sqrt
 
 @Composable
 fun GameScreen(
@@ -42,6 +43,7 @@ fun GameScreen(
     textToSpeech: TextToSpeech
 ) {
     val gameState by vm.gameState.collectAsState()
+    val settings by vm.settings.collectAsState()
 
     LaunchedEffect(gameState.gameType) {
         if (gameState.gameType == GameType.None) {
@@ -95,22 +97,23 @@ fun GameScreen(
                     modifier = Modifier
                         .fillMaxHeight()
                 ){
-                    repeat(3) {row ->
+                    val gridDimension = sqrt(settings.visualCombinations.toDouble()).toInt()
+                    repeat(gridDimension) {row ->
                         Row(
                             horizontalArrangement = Arrangement.SpaceEvenly,
                             modifier = Modifier
                                 .fillMaxWidth()
                         ) {
-                            repeat(3) { col ->
+                            repeat(gridDimension) { col ->
                                 var background = Color.LightGray
                                 if ((gameState.gameType == GameType.Visual ||
                                     gameState.gameType == GameType.AudioVisual) &&
-                                    (col + 1) + 3 * row == gameState.visualValue) {
+                                    col + 1 + gridDimension * row == gameState.visualValue) {
                                     background = Color.DarkGray
                                 }
                                 Box(
                                     modifier = Modifier
-                                        .size(120.dp)
+                                        .size((300 / gridDimension).dp)
                                         .background(background)
                                 )
 

@@ -232,8 +232,8 @@ fun HomeScreen(
                     Slider(
                         value = settings.size.toFloat(),
                         onValueChange = { vm.setSize(it.toInt()) },
-                        valueRange = 1f..100f,
-                        steps = 98,
+                        valueRange = 2f..100f,
+                        steps = 97,
                         modifier = Modifier.fillMaxWidth()
                     )
 
@@ -243,7 +243,7 @@ fun HomeScreen(
                     Slider(
                         value = settings.eventInterval.toFloat(),
                         onValueChange = { vm.setEventInterval(it.toLong()) },
-                        valueRange = 100f..2000f,
+                        valueRange = 500f..3000f,
                         steps = 18,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -254,8 +254,8 @@ fun HomeScreen(
                     Slider(
                         value = settings.nBack.toFloat(),
                         onValueChange = { vm.setNBack(it.toInt()) },
-                        valueRange = 1f..100f,
-                        steps = 98,
+                        valueRange = 1f..10f,
+                        steps = 8,
                         modifier = Modifier.fillMaxWidth()
                     )
 
@@ -266,8 +266,8 @@ fun HomeScreen(
                     Slider(
                         value = gridDimension.toFloat(),
                         onValueChange = { vm.setVisualCombinations(it.pow(2).toInt()) },
-                        valueRange = 1f..10f,
-                        steps = 8,
+                        valueRange = 2f..10f,
+                        steps = 7,
                         modifier = Modifier.fillMaxWidth()
                     )
 
@@ -277,8 +277,8 @@ fun HomeScreen(
                     Slider(
                         value = settings.audioCombinations.toFloat(),
                         onValueChange = { vm.setAudioCombinations(it.toInt()) },
-                        valueRange = 1f..26f,
-                        steps = 24,
+                        valueRange = 2f..26f,
+                        steps = 23,
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
