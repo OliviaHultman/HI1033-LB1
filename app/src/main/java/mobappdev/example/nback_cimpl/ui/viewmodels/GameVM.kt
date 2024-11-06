@@ -45,6 +45,8 @@ interface GameViewModel {
     fun setNBack(nBack: Int)
     fun setVisualCombinations(visualCombinations: Int)
     fun setAudioCombinations(audioCombinations: Int)
+    fun saveSettings()
+
     fun startGame()
 
     fun checkVisualMatch()
@@ -95,6 +97,12 @@ class GameVM(
 
     override fun setAudioCombinations(audioCombinations: Int) {
         _settings.value = _settings.value.copy(audioCombinations = audioCombinations)
+    }
+
+    override fun saveSettings() {
+        viewModelScope.launch {
+            userPreferencesRepository.saveSettings(settings.value.size, settings.value.eventInterval, settings.value.nBack, settings.value.visualCombinations, settings.value.audioCombinations)
+        }
     }
 
     override fun startGame() {
@@ -206,6 +214,21 @@ class GameVM(
             userPreferencesRepository.highscore.collect {
                 _highscore.value = it
             }
+            userPreferencesRepository.size.collect {
+                _settings.value = _settings.value.copy(size = it)
+            }
+            userPreferencesRepository.eventInterval.collect {
+                _settings.value = _settings.value.copy(eventInterval = it)
+            }
+            userPreferencesRepository.nBack.collect {
+                _settings.value = _settings.value.copy(nBack = it)
+            }
+            userPreferencesRepository.visualCombinations.collect {
+                _settings.value = _settings.value.copy(visualCombinations = it)
+            }
+            userPreferencesRepository.audioCombinations.collect {
+                _settings.value = _settings.value.copy(audioCombinations = it)
+            }
         }
     }
 }
@@ -231,7 +254,7 @@ data class Settings(
     val visualCombinations: Int = 9,
     val audioCombinations: Int = 9,
 
-)
+    )
 
 data class GameState(
     // You can use this state to push values from the VM to your UI.

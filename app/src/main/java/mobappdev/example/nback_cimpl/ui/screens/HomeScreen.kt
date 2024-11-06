@@ -244,7 +244,7 @@ fun HomeScreen(
                         value = settings.eventInterval.toFloat(),
                         onValueChange = { vm.setEventInterval(it.toLong()) },
                         valueRange = 500f..3000f,
-                        steps = 18,
+                        steps = 4,
                         modifier = Modifier.fillMaxWidth()
                     )
 
@@ -281,6 +281,16 @@ fun HomeScreen(
                         steps = 23,
                         modifier = Modifier.fillMaxWidth()
                     )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    // Save Button
+                    Button(
+                        onClick = {
+                            vm.saveSettings()
+                            showDialog = false
+                        }
+                    ) {
+                        Text("Save")
+                    }
                 }
             }
         }

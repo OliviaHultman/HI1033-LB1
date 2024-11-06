@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -31,6 +32,11 @@ class UserPreferencesRepository (
 ){
     private companion object {
         val HIGHSCORE = intPreferencesKey("highscore")
+        val SIZE = intPreferencesKey("size")
+        val EVENT_INTERVAL = longPreferencesKey("eventInterval")
+        val N_BACK = intPreferencesKey("nBack")
+        val VISUAL_COMBINATIONS = intPreferencesKey("visualCombinations")
+        val AUDIO_COMBINAIONS = intPreferencesKey("audioCombinations")
         const val TAG = "UserPreferencesRepo"
     }
 
@@ -47,9 +53,88 @@ class UserPreferencesRepository (
             preferences[HIGHSCORE] ?: 0
         }
 
+    val size: Flow<Int> = dataStore.data
+        .catch {
+            if (it is IOException) {
+                Log.e(TAG, "Error reading preferences", it)
+                emit(emptyPreferences())
+            } else {
+                throw it
+            }
+        }
+        .map { preferences ->
+            preferences[SIZE] ?: 0
+        }
+    val eventInterval: Flow<Long> = dataStore.data
+        .catch {
+            if (it is IOException) {
+                Log.e(TAG, "Error reading preferences", it)
+                emit(emptyPreferences())
+            } else {
+                throw it
+            }
+        }
+        .map { preferences ->
+            preferences[EVENT_INTERVAL] ?: 0
+        }
+    val nBack: Flow<Int> = dataStore.data
+        .catch {
+            if (it is IOException) {
+                Log.e(TAG, "Error reading preferences", it)
+                emit(emptyPreferences())
+            } else {
+                throw it
+            }
+        }
+        .map { preferences ->
+            preferences[N_BACK] ?: 0
+        }
+    val visualCombinations: Flow<Int> = dataStore.data
+        .catch {
+            if (it is IOException) {
+                Log.e(TAG, "Error reading preferences", it)
+                emit(emptyPreferences())
+            } else {
+                throw it
+            }
+        }
+        .map { preferences ->
+            preferences[VISUAL_COMBINATIONS] ?: 0
+        }
+    val audioCombinations: Flow<Int> = dataStore.data
+        .catch {
+            if (it is IOException) {
+                Log.e(TAG, "Error reading preferences", it)
+                emit(emptyPreferences())
+            } else {
+                throw it
+            }
+        }
+        .map { preferences ->
+            preferences[AUDIO_COMBINAIONS] ?: 0
+        }
+
     suspend fun saveHighScore(score: Int) {
         dataStore.edit { preferences ->
             preferences[HIGHSCORE] = score
+        }
+    }
+
+    suspend fun saveSettings(size: Int, eventInterval: Long, nBack: Int, visualCombinations: Int, audioCombinations: Int) {
+        dataStore.edit { preferences ->
+            preferences[SIZE] = size
+        }
+        dataStore.edit { preferences ->
+            preferences[EVENT_INTERVAL] = eventInterval
+        }
+        dataStore.edit { preferences ->
+            preferences[N_BACK] = nBack
+        }
+        dataStore.edit { preferences ->
+            preferences[VISUAL_COMBINATIONS] = visualCombinations
+        }
+        dataStore.edit { preferences ->
+            preferences[AUDIO_COMBINAIONS] = audioCombinations
         }
     }
 }
