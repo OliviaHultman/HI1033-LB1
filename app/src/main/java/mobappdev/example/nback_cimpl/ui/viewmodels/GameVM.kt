@@ -39,7 +39,6 @@ interface GameViewModel {
     val settings: StateFlow<Settings>
     val highscore: StateFlow<Int>
 
-    fun newGame()
     fun saveSettings(newSettings: Settings)
 
     fun startGame()
@@ -68,10 +67,6 @@ class GameVM(
     private val nBackHelper = NBackHelper()  // Helper that generate the event array
     private var visualEvents = emptyArray<Int>()
     private var audioEvents = emptyArray<Int>()  // Array with all events
-
-    override fun newGame() {
-        _gameState.value = _gameState.value.copy(finished = false)
-    }
 
     override fun saveSettings(newSettings: Settings) {
         viewModelScope.launch {
