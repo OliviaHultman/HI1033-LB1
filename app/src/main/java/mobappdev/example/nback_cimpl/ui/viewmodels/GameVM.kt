@@ -88,21 +88,21 @@ class GameVM(
             when (settings.value.gameType) {
                 GameType.Audio -> {
                     // Get the events from our C-model (returns IntArray, so we need to convert to Array<Int>)
-                    audioEvents = nBackHelper.generateNBackString(settings.value.size, settings.value.audioCombinations, 30, settings.value.nBack).toList().toTypedArray()  // Todo Higher Grade: currently the size etc. are hardcoded, make these based on user input
+                    audioEvents = nBackHelper.generateNBackString(_settings.value.size, _settings.value.audioCombinations, 30, _settings.value.nBack).toList().toTypedArray()  // Todo Higher Grade: currently the size etc. are hardcoded, make these based on user input
                     Log.d("GameVM", "The following audio sequence was generated: ${audioEvents.contentToString()}")
                     runAudioGame(audioEvents)
                 }
                 GameType.AudioVisual -> {
                     // Get the events from our C-model (returns IntArray, so we need to convert to Array<Int>)
-                    visualEvents = nBackHelper.generateNBackString(settings.value.size, settings.value.visualCombinations, 30, settings.value.nBack).toList().toTypedArray()  // Todo Higher Grade: currently the size etc. are hardcoded, make these based on user input
+                    visualEvents = nBackHelper.generateNBackString(_settings.value.size, _settings.value.visualCombinations, 30, _settings.value.nBack).toList().toTypedArray()  // Todo Higher Grade: currently the size etc. are hardcoded, make these based on user input
                     Log.d("GameVM", "The following visual sequence was generated: ${visualEvents.contentToString()}")
-                    audioEvents = nBackHelper.generateNBackString(settings.value.size, settings.value.audioCombinations, 30, settings.value.nBack).toList().toTypedArray()  // Todo Higher Grade: currently the size etc. are hardcoded, make these based on user input
+                    audioEvents = nBackHelper.generateNBackString(_settings.value.size, _settings.value.audioCombinations, 30, _settings.value.nBack).toList().toTypedArray()  // Todo Higher Grade: currently the size etc. are hardcoded, make these based on user input
                     Log.d("GameVM", "The following audio sequence was generated: ${audioEvents.contentToString()}")
                     runAudioVisualGame(visualEvents, audioEvents)
                 }
                 GameType.Visual -> {
                     // Get the events from our C-model (returns IntArray, so we need to convert to Array<Int>)
-                    visualEvents = nBackHelper.generateNBackString(settings.value.size, settings.value.visualCombinations, 30, settings.value.nBack).toList().toTypedArray()  // Todo Higher Grade: currently the size etc. are hardcoded, make these based on user input
+                    visualEvents = nBackHelper.generateNBackString(_settings.value.size, _settings.value.visualCombinations, 30, _settings.value.nBack).toList().toTypedArray()  // Todo Higher Grade: currently the size etc. are hardcoded, make these based on user input
                     Log.d("GameVM", "The following visual sequence was generated: ${visualEvents.contentToString()}")
                     runVisualGame(visualEvents)
                 }
@@ -116,10 +116,10 @@ class GameVM(
     }
 
     override fun checkVisualMatch() {
-        val nBackIndex = gameState.value.eventNr - settings.value.nBack - 1
+        val nBackIndex = _gameState.value.eventNr - _settings.value.nBack - 1
         if (gameState.value.visualMatchStatus == MatchStatus.None) {
-            if (nBackIndex >= 0 && gameState.value.visualValue == visualEvents[nBackIndex]) {
-                _gameState.value = _gameState.value.copy(visualMatchStatus = MatchStatus.Correct, score = gameState.value.score + 1)
+            if (nBackIndex >= 0 && _gameState.value.visualValue == visualEvents[nBackIndex]) {
+                _gameState.value = _gameState.value.copy(visualMatchStatus = MatchStatus.Correct, score = _gameState.value.score + 1)
             }
             else {
                 _gameState.value = _gameState.value.copy(visualMatchStatus = MatchStatus.Wrong)
@@ -128,10 +128,10 @@ class GameVM(
     }
 
     override fun checkAudioMatch() {
-        val nBackIndex = gameState.value.eventNr - settings.value.nBack - 1
-        if (gameState.value.audioMatchStatus == MatchStatus.None) {
-            if (nBackIndex >= 0 && gameState.value.audioValue == audioEvents[nBackIndex]) {
-                _gameState.value = _gameState.value.copy(audioMatchStatus = MatchStatus.Correct, score = gameState.value.score + 1)
+        val nBackIndex = _gameState.value.eventNr - _settings.value.nBack - 1
+        if (_gameState.value.audioMatchStatus == MatchStatus.None) {
+            if (nBackIndex >= 0 && _gameState.value.audioValue == audioEvents[nBackIndex]) {
+                _gameState.value = _gameState.value.copy(audioMatchStatus = MatchStatus.Correct, score = _gameState.value.score + 1)
             }
             else {
                 _gameState.value = _gameState.value.copy(audioMatchStatus = MatchStatus.Wrong)
