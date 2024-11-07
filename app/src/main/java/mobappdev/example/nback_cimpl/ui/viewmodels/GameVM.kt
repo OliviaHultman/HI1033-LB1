@@ -139,8 +139,8 @@ class GameVM(
          * Make sure the user can only register a match once for each event.
          */
         val nBackIndex = gameState.value.eventNr - settings.value.nBack - 1
-        if (gameState.value.audioMatchStatus == MatchStatus.None && nBackIndex >= 0) {
-            if (gameState.value.audioValue == audioEvents[nBackIndex]) {
+        if (gameState.value.audioMatchStatus == MatchStatus.None) {
+            if (nBackIndex >= 0 && gameState.value.audioValue == audioEvents[nBackIndex]) {
                 _gameState.value = _gameState.value.copy(audioMatchStatus = MatchStatus.Correct, score = gameState.value.score + 1)
             }
             else {

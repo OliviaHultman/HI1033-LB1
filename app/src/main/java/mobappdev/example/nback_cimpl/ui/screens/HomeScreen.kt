@@ -1,6 +1,5 @@
 package mobappdev.example.nback_cimpl.ui.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,13 +10,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
@@ -29,10 +28,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -63,7 +60,7 @@ fun HomeScreen(
 ) {
     val highscore by vm.highscore.collectAsState()  // Highscore is its own StateFlow
     val settings by vm.settings.collectAsState()
-    var showDialog by remember { mutableStateOf(false) }
+    var showSettings by remember { mutableStateOf(false) }
 
     Scaffold(
     ) {
@@ -83,10 +80,10 @@ fun HomeScreen(
             ) {
                 Button(
                     onClick = {
-                        showDialog = true;
+                        showSettings = true;
                     }) {
                     Icon(
-                        painter = painterResource(id = R.drawable.settings),
+                        imageVector = Icons.Default.Settings,
                         contentDescription = "Settings",
                         modifier = Modifier
                             .height(48.dp)
@@ -265,9 +262,9 @@ fun HomeScreen(
         }
     }
 
-    if (showDialog) {
+    if (showSettings) {
 
-        Dialog(onDismissRequest = { showDialog = false }) {
+        Dialog(onDismissRequest = { showSettings = false }) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -339,7 +336,7 @@ fun HomeScreen(
                     Button(
                         onClick = {
                             vm.saveSettings(newSettings)
-                            showDialog = false
+                            showSettings = false
                         }
                     ) {
                         Text("Save")
