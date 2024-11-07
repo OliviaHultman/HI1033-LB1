@@ -11,8 +11,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsEndWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
@@ -326,14 +328,30 @@ fun HomeScreen(
                         steps = 23,
                         modifier = Modifier.fillMaxWidth()
                     )
-
-                    Button(
-                        onClick = {
-                            vm.saveSettings(newSettings)
-                            showSettings = false
+                    Row() {
+                        Button(
+                            onClick = {
+                                vm.saveSettings(newSettings)
+                                showSettings = false
+                            },
+                            modifier = Modifier.width(100.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceAround,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text("Save")
+                                Icon(
+                                    imageVector = Icons.Default.Done,
+                                    contentDescription = "Done",
+                                    modifier = Modifier
+                                        .height(24.dp)
+                                        .aspectRatio(3f / 2f)
+                                )
+                            }
                         }
-                    ) {
-                        Text("Save")
                     }
                 }
             }

@@ -16,7 +16,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -175,7 +178,9 @@ fun GameScreen(
                     },
                     modifier = Modifier.height(100.dp)
                 ) {
-                    Column {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
                         Text(
                             text = "Audio match",
                             style = TextStyle(fontSize = 12.5.sp)
@@ -207,7 +212,9 @@ fun GameScreen(
                     modifier = Modifier.height(100.dp)
 
                 ) {
-                    Column {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
                         Text(
                             text = "Visual match",
                             style = TextStyle(fontSize = 12.5.sp)
@@ -226,10 +233,9 @@ fun GameScreen(
     }
 
     if (showGameOver) {
-        Dialog(onDismissRequest = {
-            showGameOver = false
-            navController.navigate("home")
-        }) {
+        Dialog(
+            onDismissRequest = {  }
+        ) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -253,6 +259,32 @@ fun GameScreen(
                     Text(
                         text = "Score: " + gameState.score
                     )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Button(
+                        onClick = {
+                            showGameOver = false
+                            navController.navigate("home")
+                        },
+                        modifier = Modifier.width(125.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceAround,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text("Home")
+                            Icon(
+                                imageVector = Icons.Default.Home,
+                                contentDescription = "Home",
+                                modifier = Modifier
+                                    .height(24.dp)
+                                    .aspectRatio(3f / 2f)
+                            )
+                        }
+                    }
                 }
             }
         }
