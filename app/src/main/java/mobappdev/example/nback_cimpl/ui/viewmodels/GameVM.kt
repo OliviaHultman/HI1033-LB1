@@ -23,7 +23,7 @@ import mobappdev.example.nback_cimpl.data.UserPreferencesRepository
  * It is good practice to first make an interface, which acts as the blueprint
  * for your implementation. With this interface we can create fake versions
  * of the viewmodel, which we can use to test other parts of our app that depend on the VM.
- *
+ *t 
  * Our viewmodel itself has functions to start a game, to specify a gametype,
  * and to check if we are having a match
  *
@@ -123,8 +123,8 @@ class GameVM(
          * Make sure the user can only register a match once for each event.
          */
         val nBackIndex = gameState.value.eventNr - settings.value.nBack - 1
-        if (gameState.value.visualMatchStatus == MatchStatus.None && nBackIndex >= 0) {
-            if (gameState.value.visualValue == visualEvents[nBackIndex]) {
+        if (gameState.value.visualMatchStatus == MatchStatus.None) {
+            if (nBackIndex >= 0 && gameState.value.visualValue == visualEvents[nBackIndex]) {
                 _gameState.value = _gameState.value.copy(visualMatchStatus = MatchStatus.Correct, score = gameState.value.score + 1)
             }
             else {

@@ -1,0 +1,45 @@
+{
+  "buildFiles": [
+    "C:\\Users\\Olivia Hultman\\Documents\\mobila_applikationer_och_tradlosa_nat\\lb_1\\HI1033-LB1\\app\\src\\main\\cpp\\CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "C:\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe",
+      "-C",
+      "C:\\Users\\Olivia Hultman\\Documents\\mobila_applikationer_och_tradlosa_nat\\lb_1\\HI1033-LB1\\app\\.cxx\\Debug\\2p6u2w5s\\arm64-v8a",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "C:\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe",
+    "-C",
+    "C:\\Users\\Olivia Hultman\\Documents\\mobila_applikationer_och_tradlosa_nat\\lb_1\\HI1033-LB1\\app\\.cxx\\Debug\\2p6u2w5s\\arm64-v8a",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "JniBridge::@6890427a1f51a3e7e1df": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "JniBridge",
+      "output": "C:\\Users\\Olivia Hultman\\Documents\\mobila_applikationer_och_tradlosa_nat\\lb_1\\HI1033-LB1\\app\\build\\intermediates\\cxx\\Debug\\2p6u2w5s\\obj\\arm64-v8a\\libJniBridge.so",
+      "runtimeFiles": []
+    },
+    "nback_cimpl::@6890427a1f51a3e7e1df": {
+      "toolchain": "toolchain",
+      "abi": "arm64-v8a",
+      "artifactName": "nback_cimpl",
+      "output": "C:\\Users\\Olivia Hultman\\Documents\\mobila_applikationer_och_tradlosa_nat\\lb_1\\HI1033-LB1\\app\\build\\intermediates\\cxx\\Debug\\2p6u2w5s\\obj\\arm64-v8a\\libnback_cimpl.so",
+      "runtimeFiles": []
+    }
+  },
+  "toolchains": {
+    "toolchain": {
+      "cCompilerExecutable": "C:\\Android\\Sdk\\ndk\\27.0.12077973\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang.exe",
+      "cppCompilerExecutable": "C:\\Android\\Sdk\\ndk\\27.0.12077973\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang++.exe"
+    }
+  },
+  "cFileExtensions": [
+    "c"
+  ],
+  "cppFileExtensions": []
+}

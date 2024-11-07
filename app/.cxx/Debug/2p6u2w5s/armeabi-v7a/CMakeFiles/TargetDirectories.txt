@@ -1,0 +1,4 @@
+C:/Users/Olivia Hultman/Documents/mobila_applikationer_och_tradlosa_nat/lb_1/HI1033-LB1/app/.cxx/Debug/2p6u2w5s/armeabi-v7a/CMakeFiles/nback_cimpl.dir
+C:/Users/Olivia Hultman/Documents/mobila_applikationer_och_tradlosa_nat/lb_1/HI1033-LB1/app/.cxx/Debug/2p6u2w5s/armeabi-v7a/CMakeFiles/JniBridge.dir
+C:/Users/Olivia Hultman/Documents/mobila_applikationer_och_tradlosa_nat/lb_1/HI1033-LB1/app/.cxx/Debug/2p6u2w5s/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/Olivia Hultman/Documents/mobila_applikationer_och_tradlosa_nat/lb_1/HI1033-LB1/app/.cxx/Debug/2p6u2w5s/armeabi-v7a/CMakeFiles/rebuild_cache.dir
