@@ -57,8 +57,8 @@ fun GameScreen(
     var showGameOver by remember { mutableStateOf(false) }
     var eventColor by remember { mutableStateOf(Color.LightGray) }
 
-    LaunchedEffect(gameState.gameType) {
-        if (gameState.gameType == GameType.None) {
+    LaunchedEffect(settings.gameType) {
+        if (settings.gameType == GameType.None) {
             showGameOver = true
         }
         else {
@@ -67,11 +67,11 @@ fun GameScreen(
     }
 
     LaunchedEffect(gameState.eventNr) {
-        if (gameState.gameType == GameType.Audio || gameState.gameType == GameType.AudioVisual) {
+        if (settings.gameType == GameType.Audio || settings.gameType == GameType.AudioVisual) {
             Log.d("GameScreen", (gameState.audioValue - 1 + 'A'.code).toChar().toString())
             textToSpeech.speak((gameState.audioValue - 1 + 'A'.code).toChar().toString(), TextToSpeech.QUEUE_FLUSH, null, null )
         }
-        if (gameState.gameType == GameType.Visual || gameState.gameType == GameType.AudioVisual) {
+        if (settings.gameType == GameType.Visual || settings.gameType == GameType.AudioVisual) {
             eventColor = Color.DarkGray
             delay(settings.eventInterval - 250L)
             eventColor = Color.LightGray
@@ -122,8 +122,8 @@ fun GameScreen(
                         ) {
                             repeat(gridDimension) { col ->
                                 var background = Color.LightGray
-                                if ((gameState.gameType == GameType.Visual ||
-                                    gameState.gameType == GameType.AudioVisual) &&
+                                if ((settings.gameType == GameType.Visual ||
+                                    settings.gameType == GameType.AudioVisual) &&
                                     col + 1 + gridDimension * row == gameState.visualValue) {
                                     background = eventColor
                                 }
@@ -146,7 +146,7 @@ fun GameScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Button(
-                    enabled = when (gameState.gameType) {
+                    enabled = when (settings.gameType) {
                         GameType.Audio, GameType.AudioVisual -> true
                         GameType.Visual, GameType.None -> false
                     },
@@ -157,7 +157,7 @@ fun GameScreen(
                     }),
                     onClick = {
                     // Todo: change this button behaviour
-                    if (gameState.gameType == GameType.Audio || gameState.gameType == GameType.AudioVisual) {
+                    if (settings.gameType == GameType.Audio || settings.gameType == GameType.AudioVisual) {
                         vm.checkAudioMatch()
                     }
                 }) {
@@ -170,7 +170,7 @@ fun GameScreen(
                     )
                 }
                 Button(
-                    enabled = when (gameState.gameType) {
+                    enabled = when (settings.gameType) {
                         GameType.Visual, GameType.AudioVisual -> true
                         GameType.Audio, GameType.None -> false
                     },
@@ -181,7 +181,7 @@ fun GameScreen(
                     }),
                     onClick = {
                         // Todo: change this button behaviour
-                        if (gameState.gameType == GameType.Visual || gameState.gameType == GameType.AudioVisual) {
+                        if (settings.gameType == GameType.Visual || settings.gameType == GameType.AudioVisual) {
                             vm.checkVisualMatch()
                         }
                     }) {

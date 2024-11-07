@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
@@ -29,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role.Companion.RadioButton
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -112,6 +114,23 @@ fun HomeScreen(
                     modifier = Modifier
                         .padding(16.dp)
                 ) {
+
+                    Row() {
+                        Text(
+                            text = "Game type: ",
+                            modifier = Modifier.weight(2f)
+                        )
+                        Text(
+                            text = when (settings.gameType) {
+                                GameType.Visual, GameType.Audio -> settings.gameType.toString()
+                                GameType.AudioVisual -> "Combination"
+                                GameType.None -> ""
+                            },
+                            modifier = Modifier.weight(1f))
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
                     Row() {
                         Text(
                             text = "Nr. of events: ",
@@ -279,6 +298,43 @@ fun HomeScreen(
                 ) {
                     var newSettings by remember { mutableStateOf(settings) }
 
+                    Text("Game type:")
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(
+                            selected = newSettings.gameType == GameType.Visual,
+                            onClick = { newSettings = newSettings.copy(gameType = GameType.Visual) }
+                        )
+                        Text("Visual")
+                    }
+                    Row (
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        RadioButton(
+                            selected = newSettings.gameType == GameType.Audio,
+                            onClick = { newSettings = newSettings.copy(gameType = GameType.Audio) }
+                        )
+                        Text("Audio")
+                        }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(
+                            selected = newSettings.gameType == GameType.AudioVisual,
+                            onClick = { newSettings = newSettings.copy(gameType = GameType.AudioVisual) }
+                        )
+                        Text("Combination")
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
                     Text("Nr. of events: ${newSettings.size}")
                     Slider(
                         value = newSettings.size.toFloat(),
@@ -288,7 +344,7 @@ fun HomeScreen(
                         modifier = Modifier.fillMaxWidth()
                     )
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
                     Text("Event interval: ${newSettings.eventInterval / 1000.0} s")
                     Slider(
@@ -299,7 +355,7 @@ fun HomeScreen(
                         modifier = Modifier.fillMaxWidth()
                     )
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
                     Text("N-back: ${newSettings.nBack}")
                     Slider(
@@ -322,7 +378,7 @@ fun HomeScreen(
                         modifier = Modifier.fillMaxWidth()
                     )
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
                     Text("Nr. of audio letters: ${newSettings.audioCombinations}")
                     Slider(
@@ -332,7 +388,7 @@ fun HomeScreen(
                         steps = 23,
                         modifier = Modifier.fillMaxWidth()
                     )
-                    Spacer(modifier = Modifier.width(16.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
                     Button(
                         onClick = {
                             vm.saveSettings(newSettings)

@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -33,6 +34,7 @@ class UserPreferencesRepository (
 ){
     private companion object {
         val HIGHSCORE = intPreferencesKey("highscore")
+        val GAME_TYPE = stringPreferencesKey("gameType")
         val SIZE = intPreferencesKey("size")
         val EVENT_INTERVAL = longPreferencesKey("eventInterval")
         val N_BACK = intPreferencesKey("nBack")
@@ -52,6 +54,19 @@ class UserPreferencesRepository (
         }
         .map { preferences ->
             preferences[HIGHSCORE] ?: 0
+        }
+
+    val gameType: Flow<String> = dataStore.data
+        .catch {
+            if (it is IOException) {
+                Log.e(TAG, "Error reading preferences", it)
+                emit(emptyPreferences())
+            } else {
+                throw it
+            }
+        }
+        .map { preferences ->
+            preferences[GAME_TYPE] ?: "Visual"
         }
 
     val size: Flow<Int> = dataStore.data
@@ -122,6 +137,9 @@ class UserPreferencesRepository (
     }
 
     suspend fun saveSettings(settings: Settings) {
+        dataStore.edit { preferences ->
+            preferences[GAME_TYPE] = settings.gameType.toString()
+        }
         dataStore.edit { preferences ->
             preferences[SIZE] = settings.size
         }

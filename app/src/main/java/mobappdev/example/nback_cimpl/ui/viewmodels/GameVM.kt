@@ -23,7 +23,7 @@ import mobappdev.example.nback_cimpl.data.UserPreferencesRepository
  * It is good practice to first make an interface, which acts as the blueprint
  * for your implementation. With this interface we can create fake versions
  * of the viewmodel, which we can use to test other parts of our app that depend on the VM.
- *t 
+ *t
  * Our viewmodel itself has functions to start a game, to specify a gametype,
  * and to check if we are having a match
  *
@@ -71,7 +71,7 @@ class GameVM(
 
     override fun setGameType(gameType: GameType) {
         // update the gametype in the gamestate
-        _gameState.value = _gameState.value.copy(gameType = gameType)
+        _settings.value = _settings.value.copy(gameType = gameType)
     }
 
     override fun saveSettings(newSettings: Settings) {
@@ -86,7 +86,7 @@ class GameVM(
         _gameState.value = _gameState.value.copy(visualValue = -1, audioValue = -1, eventNr = 0, visualMatchStatus = MatchStatus.None, audioMatchStatus = MatchStatus.None, score = 0)
 
         job = viewModelScope.launch {
-            when (gameState.value.gameType) {
+            when (settings.value.gameType) {
                 GameType.Audio -> {
                     // Get the events from our C-model (returns IntArray, so we need to convert to Array<Int>)
                     audioEvents = nBackHelper.generateNBackString(settings.value.size, settings.value.audioCombinations, 30, settings.value.nBack).toList().toTypedArray()  // Todo Higher Grade: currently the size etc. are hardcoded, make these based on user input
@@ -113,7 +113,7 @@ class GameVM(
             if (gameState.value.score > _highscore.value) {
                 userPreferencesRepository.saveHighScore(_gameState.value.score)
             }
-            _gameState.value = _gameState.value.copy(gameType = GameType.None)
+            _settings.value = _settings.value.copy(gameType = GameType.None)
         }
     }
 
@@ -191,6 +191,11 @@ class GameVM(
             }
         }
         viewModelScope.launch {
+            userPreferencesRepository.gameType.collect {
+                _settings.value = _settings.value.copy(gameType = GameType.valueOf(it))
+            }
+        }
+        viewModelScope.launch {
             userPreferencesRepository.size.collect {
                 _settings.value = _settings.value.copy(size = it)
             }
@@ -233,17 +238,16 @@ enum class MatchStatus{
 }
 
 data class Settings(
+    val gameType: GameType = GameType.Visual,
     val size: Int = 10,
     val eventInterval: Long = 2000L,
     val nBack: Int = 2,
     val visualCombinations: Int = 9,
     val audioCombinations: Int = 9,
-
     )
 
 data class GameState(
     // You can use this state to push values from the VM to your UI.
-    val gameType: GameType = GameType.Visual,  // Type of the game
     val visualValue: Int = -1,  // The value of the array string
     val audioValue: Int = -1,
     val eventNr: Int = 0,
