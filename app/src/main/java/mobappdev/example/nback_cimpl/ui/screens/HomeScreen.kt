@@ -188,10 +188,10 @@ fun HomeScreen(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text("Sound")
+                        Text("Audio")
                         Icon(
                             painter = painterResource(id = R.drawable.sound_on),
-                            contentDescription = "Sound",
+                            contentDescription = "Audio",
                             modifier = Modifier
                                 .height(48.dp)
                                 .aspectRatio(3f / 2f)
@@ -246,7 +246,7 @@ fun HomeScreen(
                         ) {
                             Icon(
                                 painter = painterResource(id = R.drawable.sound_on),
-                                contentDescription = "Sound",
+                                contentDescription = "Audio",
                                 modifier = Modifier
                                     .height(48.dp)
                                     .aspectRatio(3f / 2f)

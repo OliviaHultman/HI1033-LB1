@@ -25,11 +25,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import kotlinx.coroutines.delay
 import mobappdev.example.nback_cimpl.R
 import mobappdev.example.nback_cimpl.ui.viewmodels.GameType
 import mobappdev.example.nback_cimpl.ui.viewmodels.GameViewModel
@@ -44,6 +48,7 @@ fun GameScreen(
 ) {
     val gameState by vm.gameState.collectAsState()
     val settings by vm.settings.collectAsState()
+    var eventColor by remember { mutableStateOf(Color.LightGray) }
 
     LaunchedEffect(gameState.gameType) {
         if (gameState.gameType == GameType.None) {
@@ -55,9 +60,14 @@ fun GameScreen(
     }
 
     LaunchedEffect(gameState.eventNr) {
-        if (gameState.gameType == GameType.Audio || gameState.gameType == GameType.AudioVisual){
+        if (gameState.gameType == GameType.Audio || gameState.gameType == GameType.AudioVisual) {
             Log.d("GameScreen", (gameState.audioValue - 1 + 'A'.code).toChar().toString())
             textToSpeech.speak((gameState.audioValue - 1 + 'A'.code).toChar().toString(), TextToSpeech.QUEUE_FLUSH, null, null )
+        }
+        if (gameState.gameType == GameType.Visual || gameState.gameType == GameType.AudioVisual) {
+            eventColor = Color.DarkGray
+            delay(settings.eventInterval - 250L)
+            eventColor = Color.LightGray
         }
     }
 
@@ -109,7 +119,7 @@ fun GameScreen(
                                 if ((gameState.gameType == GameType.Visual ||
                                     gameState.gameType == GameType.AudioVisual) &&
                                     col + 1 + gridDimension * row == gameState.visualValue) {
-                                    background = Color.DarkGray
+                                    background = eventColor
                                 }
                                 Box(
                                     modifier = Modifier
