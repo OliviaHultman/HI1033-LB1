@@ -55,7 +55,7 @@ fun GameScreen(
     val gameState by vm.gameState.collectAsState()
     val settings by vm.settings.collectAsState()
     var showGameOver by remember { mutableStateOf(false) }
-    var eventColor by remember { mutableStateOf(Color.LightGray) }
+    var eventActive by remember { mutableStateOf(false) }
 
     LaunchedEffect(gameState.finished) {
         if (gameState.finished) {
@@ -73,9 +73,9 @@ fun GameScreen(
             textToSpeech.speak((gameState.audioValue - 1 + 'A'.code).toChar().toString(), TextToSpeech.QUEUE_FLUSH, null, null )
         }
         if (settings.gameType == GameType.Visual || settings.gameType == GameType.AudioVisual) {
-            eventColor = Color.DarkGray
+            eventActive = true
             delay(settings.eventInterval - 250L)
-            eventColor = Color.LightGray
+            eventActive = false
         }
     }
 
@@ -95,14 +95,14 @@ fun GameScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    modifier = Modifier.padding(16.dp),
+                    modifier = Modifier.padding(25.dp),
                     text = "Score: ${gameState.score}",
-                    style = MaterialTheme.typography.headlineLarge
+                    style = TextStyle(fontSize = 25.sp)
                 )
                 Text(
-                    modifier = Modifier.padding(16.dp),
+                    modifier = Modifier.padding(25.dp),
                     text = "Event: ${gameState.eventNr}",
-                    style = MaterialTheme.typography.headlineLarge
+                    style = TextStyle(fontSize = 25.sp)
                 )
             }
             Box(
@@ -125,8 +125,9 @@ fun GameScreen(
                                 var background = Color.LightGray
                                 if ((settings.gameType == GameType.Visual ||
                                     settings.gameType == GameType.AudioVisual) &&
-                                    col + 1 + gridDimension * row == gameState.visualValue) {
-                                    background = eventColor
+                                    col + 1 + gridDimension * row == gameState.visualValue &&
+                                    eventActive) {
+                                    background = MaterialTheme.colorScheme.primary
                                 }
                                 Box(
                                     modifier = Modifier
@@ -152,22 +153,30 @@ fun GameScreen(
                         GameType.Visual, GameType.None -> false
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = when (gameState.audioMatchStatus) {
-                        MatchStatus.None -> Color.DarkGray
+                        MatchStatus.None -> MaterialTheme.colorScheme.primary
                         MatchStatus.Correct -> Color.Green
                         MatchStatus.Wrong -> Color.Red
                     }),
                     onClick = {
-                    if (settings.gameType == GameType.Audio || settings.gameType == GameType.AudioVisual) {
-                        vm.checkAudioMatch()
+                        if (settings.gameType == GameType.Audio || settings.gameType == GameType.AudioVisual) {
+                            vm.checkAudioMatch()
+                        }
+                    },
+                    modifier = Modifier.height(100.dp)
+                ) {
+                    Column {
+                        Text(
+                            text = "Audio match",
+                            style = TextStyle(fontSize = 12.5.sp)
+                        )
+                        Icon(
+                            painter = painterResource(id = R.drawable.sound_on),
+                            contentDescription = "Sound",
+                            modifier = Modifier
+                                .height(48.dp)
+                                .aspectRatio(3f / 2f)
+                        )
                     }
-                }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.sound_on),
-                        contentDescription = "Sound",
-                        modifier = Modifier
-                            .height(48.dp)
-                            .aspectRatio(3f / 2f)
-                    )
                 }
                 Button(
                     enabled = when (settings.gameType) {
@@ -175,7 +184,7 @@ fun GameScreen(
                         GameType.Audio, GameType.None -> false
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = when (gameState.visualMatchStatus) {
-                        MatchStatus.None -> Color.DarkGray
+                        MatchStatus.None -> MaterialTheme.colorScheme.primary
                         MatchStatus.Correct -> Color.Green
                         MatchStatus.Wrong -> Color.Red
                     }),
@@ -183,14 +192,23 @@ fun GameScreen(
                         if (settings.gameType == GameType.Visual || settings.gameType == GameType.AudioVisual) {
                             vm.checkVisualMatch()
                         }
-                    }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.visual),
-                        contentDescription = "Visual",
-                        modifier = Modifier
-                            .height(48.dp)
-                            .aspectRatio(3f / 2f)
-                    )
+                    },
+                    modifier = Modifier.height(100.dp)
+
+                ) {
+                    Column {
+                        Text(
+                            text = "Visual match",
+                            style = TextStyle(fontSize = 12.5.sp)
+                        )
+                        Icon(
+                            painter = painterResource(id = R.drawable.visual),
+                            contentDescription = "Visual",
+                            modifier = Modifier
+                                .height(48.dp)
+                                .aspectRatio(3f / 2f)
+                        )
+                    }
                 }
             }
         }
