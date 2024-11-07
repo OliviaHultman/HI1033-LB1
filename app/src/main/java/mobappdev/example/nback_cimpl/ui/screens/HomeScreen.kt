@@ -18,27 +18,19 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
-import kotlinx.coroutines.launch
 import mobappdev.example.nback_cimpl.R
 import mobappdev.example.nback_cimpl.ui.viewmodels.GameType
 import mobappdev.example.nback_cimpl.ui.viewmodels.GameViewModel
@@ -227,11 +219,12 @@ fun HomeScreen(
                         .padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    var newSettings by remember { mutableStateOf(settings) }
 
-                    Text("Nr. of events: ${settings.size}")
+                    Text("Nr. of events: ${newSettings.size}")
                     Slider(
-                        value = settings.size.toFloat(),
-                        onValueChange = { vm.setSize(it.toInt()) },
+                        value = newSettings.size.toFloat(),
+                        onValueChange = { newSettings = newSettings.copy(size = it.toInt()) },
                         valueRange = 2f..100f,
                         steps = 97,
                         modifier = Modifier.fillMaxWidth()
@@ -239,10 +232,10 @@ fun HomeScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    Text("Event interval: ${settings.eventInterval} ms")
+                    Text("Event interval: ${newSettings.eventInterval} ms")
                     Slider(
-                        value = settings.eventInterval.toFloat(),
-                        onValueChange = { vm.setEventInterval(it.toLong()) },
+                        value = newSettings.eventInterval.toFloat(),
+                        onValueChange = { newSettings = newSettings.copy(eventInterval = it.toLong()) },
                         valueRange = 500f..3000f,
                         steps = 4,
                         modifier = Modifier.fillMaxWidth()
@@ -250,10 +243,10 @@ fun HomeScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    Text("N-back: ${settings.nBack}")
+                    Text("N-back: ${newSettings.nBack}")
                     Slider(
-                        value = settings.nBack.toFloat(),
-                        onValueChange = { vm.setNBack(it.toInt()) },
+                        value = newSettings.nBack.toFloat(),
+                        onValueChange = { newSettings = newSettings.copy(nBack = it.toInt()) },
                         valueRange = 1f..10f,
                         steps = 8,
                         modifier = Modifier.fillMaxWidth()
@@ -261,11 +254,11 @@ fun HomeScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    val gridDimension = sqrt(settings.visualCombinations.toDouble())
+                    val gridDimension = sqrt(newSettings.visualCombinations.toDouble())
                     Text("Visual grid dimension: ${gridDimension.toInt()}")
                     Slider(
                         value = gridDimension.toFloat(),
-                        onValueChange = { vm.setVisualCombinations(it.pow(2).toInt()) },
+                        onValueChange = { newSettings = newSettings.copy(visualCombinations = it.pow(2).toInt()) },
                         valueRange = 2f..10f,
                         steps = 7,
                         modifier = Modifier.fillMaxWidth()
@@ -273,19 +266,18 @@ fun HomeScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    Text("Nr. of audio letters: ${settings.audioCombinations}")
+                    Text("Nr. of audio letters: ${newSettings.audioCombinations}")
                     Slider(
-                        value = settings.audioCombinations.toFloat(),
-                        onValueChange = { vm.setAudioCombinations(it.toInt()) },
+                        value = newSettings.audioCombinations.toFloat(),
+                        onValueChange = { newSettings = newSettings.copy(audioCombinations = it.toInt()) },
                         valueRange = 2f..26f,
                         steps = 23,
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.width(16.dp))
-                    // Save Button
                     Button(
                         onClick = {
-                            vm.saveSettings()
+                            vm.saveSettings(newSettings)
                             showDialog = false
                         }
                     ) {

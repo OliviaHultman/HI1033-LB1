@@ -40,12 +40,7 @@ interface GameViewModel {
     val highscore: StateFlow<Int>
 
     fun setGameType(gameType: GameType)
-    fun setSize(size: Int)
-    fun setEventInterval(eventInterval: Long)
-    fun setNBack(nBack: Int)
-    fun setVisualCombinations(visualCombinations: Int)
-    fun setAudioCombinations(audioCombinations: Int)
-    fun saveSettings()
+    fun saveSettings(newSettings: Settings)
 
     fun startGame()
 
@@ -79,29 +74,9 @@ class GameVM(
         _gameState.value = _gameState.value.copy(gameType = gameType)
     }
 
-    override fun setSize(size: Int) {
-        _settings.value = _settings.value.copy(size = size)
-    }
-
-    override fun setEventInterval(eventInterval: Long) {
-        _settings.value = _settings.value.copy(eventInterval = eventInterval)
-    }
-
-    override fun setNBack(nBack: Int) {
-        _settings.value = _settings.value.copy(nBack = nBack)
-    }
-
-    override fun setVisualCombinations(visualCombinations: Int) {
-        _settings.value = _settings.value.copy(visualCombinations = visualCombinations)
-    }
-
-    override fun setAudioCombinations(audioCombinations: Int) {
-        _settings.value = _settings.value.copy(audioCombinations = audioCombinations)
-    }
-
-    override fun saveSettings() {
+    override fun saveSettings(newSettings: Settings) {
         viewModelScope.launch {
-            userPreferencesRepository.saveSettings(settings.value.size, settings.value.eventInterval, settings.value.nBack, settings.value.visualCombinations, settings.value.audioCombinations)
+            userPreferencesRepository.saveSettings(newSettings)
         }
     }
 
@@ -214,18 +189,28 @@ class GameVM(
             userPreferencesRepository.highscore.collect {
                 _highscore.value = it
             }
+        }
+        viewModelScope.launch {
             userPreferencesRepository.size.collect {
                 _settings.value = _settings.value.copy(size = it)
             }
+        }
+        viewModelScope.launch {
             userPreferencesRepository.eventInterval.collect {
                 _settings.value = _settings.value.copy(eventInterval = it)
             }
+        }
+        viewModelScope.launch {
             userPreferencesRepository.nBack.collect {
                 _settings.value = _settings.value.copy(nBack = it)
             }
+        }
+        viewModelScope.launch {
             userPreferencesRepository.visualCombinations.collect {
                 _settings.value = _settings.value.copy(visualCombinations = it)
             }
+        }
+        viewModelScope.launch {
             userPreferencesRepository.audioCombinations.collect {
                 _settings.value = _settings.value.copy(audioCombinations = it)
             }

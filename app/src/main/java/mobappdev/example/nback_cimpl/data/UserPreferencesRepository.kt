@@ -10,6 +10,7 @@ import androidx.datastore.preferences.core.longPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import mobappdev.example.nback_cimpl.ui.viewmodels.Settings
 import java.io.IOException
 
 /**
@@ -120,21 +121,21 @@ class UserPreferencesRepository (
         }
     }
 
-    suspend fun saveSettings(size: Int, eventInterval: Long, nBack: Int, visualCombinations: Int, audioCombinations: Int) {
+    suspend fun saveSettings(settings: Settings) {
         dataStore.edit { preferences ->
-            preferences[SIZE] = size
+            preferences[SIZE] = settings.size
         }
         dataStore.edit { preferences ->
-            preferences[EVENT_INTERVAL] = eventInterval
+            preferences[EVENT_INTERVAL] = settings.eventInterval
         }
         dataStore.edit { preferences ->
-            preferences[N_BACK] = nBack
+            preferences[N_BACK] = settings.nBack
         }
         dataStore.edit { preferences ->
-            preferences[VISUAL_COMBINATIONS] = visualCombinations
+            preferences[VISUAL_COMBINATIONS] = settings.visualCombinations
         }
         dataStore.edit { preferences ->
-            preferences[AUDIO_COMBINAIONS] = audioCombinations
+            preferences[AUDIO_COMBINAIONS] = settings.audioCombinations
         }
     }
 }
