@@ -1,5 +1,6 @@
 package mobappdev.example.nback_cimpl.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -27,8 +29,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import mobappdev.example.nback_cimpl.R
@@ -75,11 +81,6 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    modifier = Modifier.padding(32.dp),
-                    text = "N-back game",
-                    style = MaterialTheme.typography.headlineLarge
-                )
                 Button(
                     onClick = {
                         showDialog = true;
@@ -93,21 +94,81 @@ fun HomeScreen(
                     )
                 }
             }
-            Text(
+            Text (
                 modifier = Modifier.padding(32.dp),
+                text = "N-back game",
+                style = TextStyle(fontSize = 50.sp)
+            )
+            Text(
+                modifier = Modifier.padding(16.dp),
                 text = "High score: $highscore",
-                style = MaterialTheme.typography.headlineLarge
+                style = TextStyle(fontSize = 25.sp)
             )
             // Todo: You'll probably want to change this "BOX" part of the composable
             Box(
-                modifier = Modifier.weight(1f),
-                contentAlignment = Alignment.Center
+                modifier = Modifier
+                    .padding(16.dp)
+                    .weight(1f)
+
             ) {
                 Column(
-                    Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    modifier = Modifier
+                        .padding(16.dp)
                 ) {
-                }
+                    Row() {
+                        Text(
+                            "Nr. of events: ",
+                            modifier = Modifier.weight(2f)
+                        )
+                        Text(
+                            settings.size.toString(),
+                            modifier = Modifier.weight(1f))
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Row() {
+                        Text(
+                            "Event interval: ",
+                            modifier = Modifier.weight(2f))
+                        Text(
+                            settings.eventInterval.toString(),
+                            modifier = Modifier.weight(1f))
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Row() {
+                        Text(
+                            "N-back: ",
+                            modifier = Modifier.weight(2f))
+                        Text(
+                            settings.nBack.toString(),
+                            modifier = Modifier.weight(1f))
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Row() {
+                        Text(
+                            "Visual grid dimension: ",
+                            modifier = Modifier.weight(2f))
+                        Text(
+                            sqrt(settings.visualCombinations.toDouble()).toInt().toString(),
+                            modifier = Modifier.weight(1f))
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Row() {
+                        Text(
+                            "Nr. of audio letters: ",
+                            modifier = Modifier.weight(2f))
+                        Text(
+                            settings.audioCombinations.toString(),
+                            modifier = Modifier.weight(1f))
+                    }
+                    }
             }
             Row(
                 modifier = Modifier
@@ -162,7 +223,7 @@ fun HomeScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
+                    .padding(32.dp),
                 horizontalArrangement = Arrangement.SpaceAround,
                 verticalAlignment = Alignment.CenterVertically
             ) {
