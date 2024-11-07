@@ -117,11 +117,11 @@ fun HomeScreen(
                 ) {
                     Row() {
                         Text(
-                            "Nr. of events: ",
+                            text = "Nr. of events: ",
                             modifier = Modifier.weight(2f)
                         )
                         Text(
-                            settings.size.toString(),
+                            text = settings.size.toString(),
                             modifier = Modifier.weight(1f))
                     }
 
@@ -129,10 +129,10 @@ fun HomeScreen(
 
                     Row() {
                         Text(
-                            "Event interval: ",
+                            text = "Event interval: ",
                             modifier = Modifier.weight(2f))
                         Text(
-                            settings.eventInterval.toString(),
+                            text = (settings.eventInterval / 1000.0).toString() + " s",
                             modifier = Modifier.weight(1f))
                     }
 
@@ -140,10 +140,10 @@ fun HomeScreen(
 
                     Row() {
                         Text(
-                            "N-back: ",
+                            text = "N-back: ",
                             modifier = Modifier.weight(2f))
                         Text(
-                            settings.nBack.toString(),
+                            text = settings.nBack.toString(),
                             modifier = Modifier.weight(1f))
                     }
 
@@ -151,10 +151,10 @@ fun HomeScreen(
 
                     Row() {
                         Text(
-                            "Visual grid dimension: ",
+                            text = "Visual grid dimension: ",
                             modifier = Modifier.weight(2f))
                         Text(
-                            sqrt(settings.visualCombinations.toDouble()).toInt().toString(),
+                            text = sqrt(settings.visualCombinations.toDouble()).toInt().toString(),
                             modifier = Modifier.weight(1f))
                     }
 
@@ -162,10 +162,10 @@ fun HomeScreen(
 
                     Row() {
                         Text(
-                            "Nr. of audio letters: ",
+                            text = "Nr. of audio letters: ",
                             modifier = Modifier.weight(2f))
                         Text(
-                            settings.audioCombinations.toString(),
+                            text = settings.audioCombinations.toString(),
                             modifier = Modifier.weight(1f))
                     }
                     }
@@ -293,7 +293,7 @@ fun HomeScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    Text("Event interval: ${newSettings.eventInterval} ms")
+                    Text("Event interval: ${newSettings.eventInterval / 1000.0} s")
                     Slider(
                         value = newSettings.eventInterval.toFloat(),
                         onValueChange = { newSettings = newSettings.copy(eventInterval = it.toLong()) },
