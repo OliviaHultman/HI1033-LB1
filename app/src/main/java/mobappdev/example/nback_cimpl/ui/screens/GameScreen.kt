@@ -57,13 +57,8 @@ fun GameScreen(
     var showGameOver by remember { mutableStateOf(false) }
     var eventColor by remember { mutableStateOf(Color.LightGray) }
 
-    LaunchedEffect(settings.gameType) {
-        if (settings.gameType == GameType.None) {
-            showGameOver = true
-        }
-        else {
-            vm.startGame()
-        }
+    LaunchedEffect(Unit) {
+        vm.startGame()
     }
 
     LaunchedEffect(gameState.eventNr) {
@@ -75,6 +70,12 @@ fun GameScreen(
             eventColor = Color.DarkGray
             delay(settings.eventInterval - 250L)
             eventColor = Color.LightGray
+        }
+    }
+
+    LaunchedEffect(gameState.finished) {
+        if (gameState.finished) {
+            showGameOver = true
         }
     }
 

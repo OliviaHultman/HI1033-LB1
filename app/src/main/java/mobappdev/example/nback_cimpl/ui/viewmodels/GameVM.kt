@@ -83,7 +83,7 @@ class GameVM(
     override fun startGame() {
         job?.cancel()  // Cancel any existing game loop
 
-        _gameState.value = _gameState.value.copy(visualValue = -1, audioValue = -1, eventNr = 0, visualMatchStatus = MatchStatus.None, audioMatchStatus = MatchStatus.None, score = 0)
+        _gameState.value = _gameState.value.copy(visualValue = -1, audioValue = -1, eventNr = 0, visualMatchStatus = MatchStatus.None, audioMatchStatus = MatchStatus.None, score = 0, finished = false)
 
         job = viewModelScope.launch {
             when (settings.value.gameType) {
@@ -109,11 +109,11 @@ class GameVM(
                 }
                 GameType.None -> Unit
             }
+            _gameState.value = _gameState.value.copy(finished = true)
             // Todo: update the highscore
             if (gameState.value.score > _highscore.value) {
                 userPreferencesRepository.saveHighScore(_gameState.value.score)
             }
-            _settings.value = _settings.value.copy(gameType = GameType.None)
         }
     }
 
@@ -253,5 +253,6 @@ data class GameState(
     val eventNr: Int = 0,
     val visualMatchStatus: MatchStatus = MatchStatus.None,
     val audioMatchStatus: MatchStatus = MatchStatus.None,
-    val score: Int = 0
+    val score: Int = 0,
+    val finished: Boolean = false
 )
