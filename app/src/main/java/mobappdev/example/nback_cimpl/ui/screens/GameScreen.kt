@@ -56,26 +56,37 @@ fun GameScreen(
     val settings by vm.settings.collectAsState()
     var showGameOver by remember { mutableStateOf(false) }
     var eventActive by remember { mutableStateOf(false) }
+    var gameStarted by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        vm.startGame()
+    }
 
     LaunchedEffect(gameState.finished) {
-        if (gameState.finished) {
+        if (gameStarted && gameState.finished) {
             showGameOver = true
         }
-        else {
-            showGameOver = false
-            vm.startGame()
+        else if (!gameState.finished) {
+            gameStarted = true
         }
     }
 
     LaunchedEffect(gameState.eventNr) {
-        if (settings.gameType == GameType.Audio || settings.gameType == GameType.AudioVisual) {
-            Log.d("GameScreen", (gameState.audioValue - 1 + 'A'.code).toChar().toString())
-            textToSpeech.speak((gameState.audioValue - 1 + 'A'.code).toChar().toString(), TextToSpeech.QUEUE_FLUSH, null, null )
-        }
-        if (settings.gameType == GameType.Visual || settings.gameType == GameType.AudioVisual) {
-            eventActive = true
-            delay(settings.eventInterval - 250L)
-            eventActive = false
+        if (!gameState.finished) {
+            if (settings.gameType == GameType.Audio || settings.gameType == GameType.AudioVisual) {
+                Log.d("GameScreen", (gameState.audioValue - 1 + 'A'.code).toChar().toString())
+                textToSpeech.speak(
+                    (gameState.audioValue - 1 + 'A'.code).toChar().toString(),
+                    TextToSpeech.QUEUE_FLUSH,
+                    null,
+                    null
+                )
+            }
+            if (settings.gameType == GameType.Visual || settings.gameType == GameType.AudioVisual) {
+                eventActive = true
+                delay(settings.eventInterval - 250L)
+                eventActive = false
+            }
         }
     }
 

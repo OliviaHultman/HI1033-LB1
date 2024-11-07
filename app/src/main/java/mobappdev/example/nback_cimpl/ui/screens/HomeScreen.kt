@@ -198,7 +198,6 @@ fun HomeScreen(
                         .width(250.dp)
                         .height(100.dp),
                     onClick = {
-                        vm.newGame()
                         navController.navigate("game");
                     }
                 ) {
@@ -286,8 +285,8 @@ fun HomeScreen(
                     Slider(
                         value = newSettings.size.toFloat(),
                         onValueChange = { newSettings = newSettings.copy(size = it.toInt()) },
-                        valueRange = 2f..100f,
-                        steps = 97,
+                        valueRange = 4f..100f,
+                        steps = 95,
                         modifier = Modifier.fillMaxWidth()
                     )
 
