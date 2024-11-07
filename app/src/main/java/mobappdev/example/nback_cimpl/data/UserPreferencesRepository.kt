@@ -64,7 +64,7 @@ class UserPreferencesRepository (
             }
         }
         .map { preferences ->
-            preferences[SIZE] ?: 0
+            preferences[SIZE] ?: 10
         }
     val eventInterval: Flow<Long> = dataStore.data
         .catch {
@@ -76,7 +76,7 @@ class UserPreferencesRepository (
             }
         }
         .map { preferences ->
-            preferences[EVENT_INTERVAL] ?: 0
+            preferences[EVENT_INTERVAL] ?: 2000L
         }
     val nBack: Flow<Int> = dataStore.data
         .catch {
@@ -88,7 +88,7 @@ class UserPreferencesRepository (
             }
         }
         .map { preferences ->
-            preferences[N_BACK] ?: 0
+            preferences[N_BACK] ?: 2
         }
     val visualCombinations: Flow<Int> = dataStore.data
         .catch {
@@ -100,7 +100,7 @@ class UserPreferencesRepository (
             }
         }
         .map { preferences ->
-            preferences[VISUAL_COMBINATIONS] ?: 0
+            preferences[VISUAL_COMBINATIONS] ?: 9
         }
     val audioCombinations: Flow<Int> = dataStore.data
         .catch {
@@ -112,7 +112,7 @@ class UserPreferencesRepository (
             }
         }
         .map { preferences ->
-            preferences[AUDIO_COMBINAIONS] ?: 0
+            preferences[AUDIO_COMBINAIONS] ?: 9
         }
 
     suspend fun saveHighScore(score: Int) {
