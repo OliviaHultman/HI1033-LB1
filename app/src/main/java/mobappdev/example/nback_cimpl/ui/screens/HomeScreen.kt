@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -94,16 +95,15 @@ fun HomeScreen(
                 }
             }
             Text (
-                modifier = Modifier.padding(32.dp),
+                modifier = Modifier.padding(vertical = 75.dp),
                 text = "N-back game",
                 style = TextStyle(fontSize = 50.sp)
             )
             Text(
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier.padding(vertical = 25.dp),
                 text = "High score: $highscore",
                 style = TextStyle(fontSize = 25.sp)
             )
-            // Todo: You'll probably want to change this "BOX" part of the composable
             Box(
                 modifier = Modifier
                     .padding(16.dp)
@@ -189,87 +189,36 @@ fun HomeScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.SpaceAround,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Button(
-                    modifier = Modifier.width(150.dp),
-                    onClick = {
-                    // Todo: change this button behaviour
-                    vm.setGameType(GameType.Audio);
-                    navController.navigate("game");
-                }) {
-                    Column (
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text("Audio")
-                        Icon(
-                            painter = painterResource(id = R.drawable.sound_on),
-                            contentDescription = "Audio",
-                            modifier = Modifier
-                                .height(48.dp)
-                                .aspectRatio(3f / 2f)
-                        )
-                    }
-                }
-                Button(
-                    modifier = Modifier.width(150.dp),
-                    onClick = {
-                        // Todo: change this button behaviour
-                        vm.setGameType(GameType.Visual);
-                        navController.navigate("game");
-                    }) {
-                    Column (
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text("Visual")
-                        Icon(
-                            painter = painterResource(id = R.drawable.visual),
-                            contentDescription = "Visual",
-                            modifier = Modifier
-                                .height(48.dp)
-                                .aspectRatio(3f / 2f)
-                        )
-                    }
-                }
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
                     .padding(32.dp),
                 horizontalArrangement = Arrangement.SpaceAround,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Button(
-                    modifier = Modifier.width(250.dp),
+                    modifier = Modifier
+                        .width(250.dp)
+                        .height(100.dp),
                     onClick = {
-                        vm.setGameType(GameType.AudioVisual);
+                        vm.newGame()
                         navController.navigate("game");
-                    }) {
+                    }
+                ) {
                     Column(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text("Combination")
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceAround,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.sound_on),
-                                contentDescription = "Audio",
-                                modifier = Modifier
-                                    .height(48.dp)
-                                    .aspectRatio(3f / 2f)
+                            Text(
+                                text = "Start game",
+                                style = TextStyle(fontSize = 25.sp)
                             )
                             Icon(
-                                painter = painterResource(id = R.drawable.visual),
-                                contentDescription = "Visual",
+                                imageVector = Icons.Default.PlayArrow,
+                                contentDescription = "Play arrow",
                                 modifier = Modifier
                                     .height(48.dp)
                                     .aspectRatio(3f / 2f)
@@ -333,8 +282,6 @@ fun HomeScreen(
                         Text("Combination")
                     }
 
-                    Spacer(modifier = Modifier.height(8.dp))
-
                     Text("Nr. of events: ${newSettings.size}")
                     Slider(
                         value = newSettings.size.toFloat(),
@@ -343,8 +290,6 @@ fun HomeScreen(
                         steps = 97,
                         modifier = Modifier.fillMaxWidth()
                     )
-
-                    Spacer(modifier = Modifier.height(8.dp))
 
                     Text("Event interval: ${newSettings.eventInterval / 1000.0} s")
                     Slider(
@@ -355,8 +300,6 @@ fun HomeScreen(
                         modifier = Modifier.fillMaxWidth()
                     )
 
-                    Spacer(modifier = Modifier.height(8.dp))
-
                     Text("N-back: ${newSettings.nBack}")
                     Slider(
                         value = newSettings.nBack.toFloat(),
@@ -365,8 +308,6 @@ fun HomeScreen(
                         steps = 8,
                         modifier = Modifier.fillMaxWidth()
                     )
-
-                    Spacer(modifier = Modifier.height(16.dp))
 
                     val gridDimension = sqrt(newSettings.visualCombinations.toDouble())
                     Text("Visual grid dimension: ${gridDimension.toInt()}")
@@ -378,8 +319,6 @@ fun HomeScreen(
                         modifier = Modifier.fillMaxWidth()
                     )
 
-                    Spacer(modifier = Modifier.height(8.dp))
-
                     Text("Nr. of audio letters: ${newSettings.audioCombinations}")
                     Slider(
                         value = newSettings.audioCombinations.toFloat(),
@@ -388,7 +327,7 @@ fun HomeScreen(
                         steps = 23,
                         modifier = Modifier.fillMaxWidth()
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
+
                     Button(
                         onClick = {
                             vm.saveSettings(newSettings)

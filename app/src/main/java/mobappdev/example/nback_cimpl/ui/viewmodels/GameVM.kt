@@ -39,7 +39,7 @@ interface GameViewModel {
     val settings: StateFlow<Settings>
     val highscore: StateFlow<Int>
 
-    fun setGameType(gameType: GameType)
+    fun newGame()
     fun saveSettings(newSettings: Settings)
 
     fun startGame()
@@ -69,9 +69,8 @@ class GameVM(
     private var visualEvents = emptyArray<Int>()
     private var audioEvents = emptyArray<Int>()  // Array with all events
 
-    override fun setGameType(gameType: GameType) {
-        // update the gametype in the gamestate
-        _settings.value = _settings.value.copy(gameType = gameType)
+    override fun newGame() {
+        _gameState.value = _gameState.value.copy(finished = false)
     }
 
     override fun saveSettings(newSettings: Settings) {
@@ -110,7 +109,6 @@ class GameVM(
                 GameType.None -> Unit
             }
             _gameState.value = _gameState.value.copy(finished = true)
-            // Todo: update the highscore
             if (gameState.value.score > _highscore.value) {
                 userPreferencesRepository.saveHighScore(_gameState.value.score)
             }
@@ -118,10 +116,6 @@ class GameVM(
     }
 
     override fun checkVisualMatch() {
-        /**
-         * Todo: This function should check if there is a match when the user presses a match button
-         * Make sure the user can only register a match once for each event.
-         */
         val nBackIndex = gameState.value.eventNr - settings.value.nBack - 1
         if (gameState.value.visualMatchStatus == MatchStatus.None) {
             if (nBackIndex >= 0 && gameState.value.visualValue == visualEvents[nBackIndex]) {
@@ -134,10 +128,6 @@ class GameVM(
     }
 
     override fun checkAudioMatch() {
-        /**
-         * Todo: This function should check if there is a match when the user presses a match button
-         * Make sure the user can only register a match once for each event.
-         */
         val nBackIndex = gameState.value.eventNr - settings.value.nBack - 1
         if (gameState.value.audioMatchStatus == MatchStatus.None) {
             if (nBackIndex >= 0 && gameState.value.audioValue == audioEvents[nBackIndex]) {
@@ -150,7 +140,6 @@ class GameVM(
     }
 
     private suspend fun runAudioGame(events: Array<Int>) {
-        // Todo: Make work for Basic grade
         for (value in events) {
             _gameState.value = _gameState.value.copy(audioValue = value, eventNr = _gameState.value.eventNr + 1, audioMatchStatus = MatchStatus.None)
             delay(settings.value.eventInterval)
@@ -158,7 +147,6 @@ class GameVM(
     }
 
     private suspend fun runVisualGame(events: Array<Int>){
-        // Todo: Replace this code for actual game code
         for (value in events) {
             _gameState.value = _gameState.value.copy(visualValue = value, eventNr = _gameState.value.eventNr + 1, visualMatchStatus = MatchStatus.None)
             delay(settings.value.eventInterval)
@@ -167,7 +155,6 @@ class GameVM(
     }
 
     private suspend fun runAudioVisualGame(visualEvents: Array<Int>, audioEvents: Array<Int>){
-        // Todo: Make work for Higher grade
         for (i in 0 until minOf(visualEvents.size, audioEvents.size)) {
             _gameState.value = _gameState.value.copy(visualValue = visualEvents[i], audioValue = audioEvents[i], eventNr = _gameState.value.eventNr + 1, visualMatchStatus = MatchStatus.None, audioMatchStatus = MatchStatus.None)
             delay(settings.value.eventInterval)
@@ -243,8 +230,8 @@ data class Settings(
     val eventInterval: Long = 2000L,
     val nBack: Int = 2,
     val visualCombinations: Int = 9,
-    val audioCombinations: Int = 9,
-    )
+    val audioCombinations: Int = 9
+)
 
 data class GameState(
     // You can use this state to push values from the VM to your UI.

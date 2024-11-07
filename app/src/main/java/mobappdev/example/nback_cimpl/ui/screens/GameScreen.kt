@@ -57,8 +57,14 @@ fun GameScreen(
     var showGameOver by remember { mutableStateOf(false) }
     var eventColor by remember { mutableStateOf(Color.LightGray) }
 
-    LaunchedEffect(Unit) {
-        vm.startGame()
+    LaunchedEffect(gameState.finished) {
+        if (gameState.finished) {
+            showGameOver = true
+        }
+        else {
+            showGameOver = false
+            vm.startGame()
+        }
     }
 
     LaunchedEffect(gameState.eventNr) {
@@ -70,12 +76,6 @@ fun GameScreen(
             eventColor = Color.DarkGray
             delay(settings.eventInterval - 250L)
             eventColor = Color.LightGray
-        }
-    }
-
-    LaunchedEffect(gameState.finished) {
-        if (gameState.finished) {
-            showGameOver = true
         }
     }
 
@@ -157,7 +157,6 @@ fun GameScreen(
                         MatchStatus.Wrong -> Color.Red
                     }),
                     onClick = {
-                    // Todo: change this button behaviour
                     if (settings.gameType == GameType.Audio || settings.gameType == GameType.AudioVisual) {
                         vm.checkAudioMatch()
                     }
@@ -181,7 +180,6 @@ fun GameScreen(
                         MatchStatus.Wrong -> Color.Red
                     }),
                     onClick = {
-                        // Todo: change this button behaviour
                         if (settings.gameType == GameType.Visual || settings.gameType == GameType.AudioVisual) {
                             vm.checkVisualMatch()
                         }
